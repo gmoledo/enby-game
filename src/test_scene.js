@@ -7,11 +7,11 @@ class TestScene extends Phaser.Scene {
 	}
 
 	preload() {
-
+		this.load.image("player", "assets/player.png");
 	}
 
 	create() {
-		this.inputManager = new InputManager(this, []);
+		this.inputManager = new InputManager(this, ["esc"]);
 
 		this.physicsManager = new PhysicsManager(this);
 
