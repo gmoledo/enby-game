@@ -9,32 +9,55 @@ class Player {
 		this.go.body.setSize(this.go.body.width, this.go.body.height / 2, false);
 		this.go.body.setOffset(0, this.go.height / 2);
 
-		this.tilePosition = new Phaser.Math.Vector2(this.scene.grid.grid[24][12].x, this.scene.grid.grid[24][12].y);
+		this.tilePosition = new Phaser.Math.Vector2(this.scene.grid.data[24][12].x, this.scene.grid.data[24][12].y);
 	}
 
 	update(dt) {
-		this.go.body.position = new Phaser.Math.Vector2(this.tilePosition.x * this.scene.grid.map.tileWidth + this.scene.grid.layer.x,
-														this.tilePosition.y * this.scene.grid.map.tileHeight + this.scene.grid.layer.y);
-		
+		let moveX = 0;
+		let moveY = 0;
 
 		if (this.scene.inputManager.goLeft) {
-			this.move(-1, 0);
+			moveX = -1;
 //			this.go.body.setVelocity(-100, this.go.body.velocity.y);
 		}
 		if (this.scene.inputManager.goRight) {
-			this.move(1, 0);
+			moveX = 1;
 		}
 
 		if (this.scene.inputManager.goUp) {
-			this.move(0, -1);
+			moveY = -1;
 		}
 		if (this.scene.inputManager.goDown) {
-			this.move(0, 1);
+			moveY = 1;
+		}
+
+		if (!this.moving) {
+			this.move(moveX, moveY);
 		}
 	}
 
 	move(dx, dy) {
+		if (dx == 0 && dy == 0) {
+			return;
+		}
+
+		this.moving = true;
+
 		this.tilePosition.x += dx;
 		this.tilePosition.y += dy;
+
+		this.scene.tweens.add({
+			targets: this.go,
+			x: this.go.x + dx * this.scene.grid.map.tileWidth,
+			y: this.go.y + dy * this.scene.grid.map.tileHeight,
+			duration: 200,
+			ease: "Linear",
+			onComplete: this.onComplete,
+			onCompleteScope: this
+		});
+	}
+
+	onComplete() {
+		this.moving = false;
 	}
 }
