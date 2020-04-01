@@ -2,10 +2,11 @@ class Player {
 	constructor(scene) {
 		this.scene = scene;
 
-		this.go = this.scene.add.sprite(this.scene.grid.data[24][12].x * this.scene.grid.map.tileWidth,
-										this.scene.grid.data[24][12].y * this.scene.grid.map.tileHeight,
+		this.tilePos = new Phaser.Math.Vector2(23, 15);
+		this.go = this.scene.add.sprite(this.tilePos.x * this.scene.grid.map.tileWidth + this.scene.grid.layer.x,
+										this.tilePos.y * this.scene.grid.map.tileHeight,
 										"player");
-		this.go.setOrigin(0, 0);
+		this.go.setOrigin(0, 0.5);
 
 		this.scene.physicsManager.addToGroup(this.go, "dynamic");
 
@@ -17,9 +18,9 @@ class Player {
 		let moveX = 0;
 		let moveY = 0;
 
+
 		if (this.scene.inputManager.goLeft) {
 			moveX = -1;
-//			this.go.body.setVelocity(-100, this.go.body.velocity.y);
 		}
 		if (this.scene.inputManager.goRight) {
 			moveX = 1;
@@ -32,9 +33,26 @@ class Player {
 			moveY = 1;
 		}
 
+
 		if (!this.moving) {
-			this.move(moveX, moveY);
+			let nextTile = this.scene.grid.map.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
+			if (!nextTile.properties.Collision) {
+				this.move(moveX, moveY);
+			} 
+			else {
+				nextTile = this.scene.grid.map.getTileAt(this.tilePos.x + moveX, this.tilePos.y);
+				if (!nextTile.properties.Collision) {
+					this.move(moveX, 0);
+				}
+
+				nextTile = this.scene.grid.map.getTileAt(this.tilePos.x, this.tilePos.y + moveY);
+				if (!nextTile.properties.Collision) {
+					this.move(0, moveY);
+				}
+			}
 		}
+
+
 	}
 
 	move(dx, dy) {
@@ -43,6 +61,9 @@ class Player {
 		}
 
 		this.moving = true;
+
+		this.tilePos.x += dx;
+		this.tilePos.y += dy;
 
 		this.scene.tweens.add({
 			targets: this.go,
