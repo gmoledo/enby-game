@@ -3,9 +3,14 @@ class TestScene extends Phaser.Scene {
 		super({key: "TestScene", active: true});
 
 		// States for changing game behavior
-		this.states = ["gameplay", "edit"];
+		this.states = ["play", "pause"];
 		this.stateIndex = 0;
 		this.state = this.states[this.stateIndex];
+	}
+
+	init() {
+		// Class for handling input related logic
+		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d", "enter"]);
 	}
 
 	preload() {
@@ -17,10 +22,6 @@ class TestScene extends Phaser.Scene {
 	}
 
 	create() {
-		console.log(this.cameras.main);
-		// Class for handling input related logic
-		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d"]);
-
 		// Class for handling physics related logic (might not be necessary)
 		this.physicsManager = new PhysicsManager(this);
 
@@ -41,12 +42,12 @@ class TestScene extends Phaser.Scene {
 	}
 
 	update(time, delta) {
-		var dt = delta / 1000;
+		let dt = delta / 1000;
 
-		this.state = this.states[this.stateIndex];
+		if (this.state == "play") {
+			this.player.update(dt);
 
-		this.player.update(dt);
-
-		this.camera.update(dt);
+			this.camera.update(dt);
+		}
 	}
 }

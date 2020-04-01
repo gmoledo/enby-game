@@ -18,6 +18,8 @@ class Player {
 
 		// Tween for moving player
 		this.moveTween = this.scene.tweens.create({targets: this.go});
+
+		this.messages = ["Message 1", "This is message 2", "This is the final message.\nGot it?"];
 	}
 
 	update(dt) {
@@ -88,16 +90,11 @@ class Player {
 	}
 
 	checkEgg() {
-		this.scene.time.addEvent({
-			delay: 1,
-			callback: () => {
-				if (this.scene.physics.world.overlap(this.go, this.scene.egg)) {
-					this.scene.egg.destroy();
-					this.UIScene.dialogueManager.queueMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a ipsum id enim auctor vulputate eu vel mi. Donec id neque semper tellus eleifend sodales. Sed sed sem varius, convallis sapien non, elementum tellus. Donec at venenatis mauris. Nullam eget purus at justo laoreet tincidunt id luctus nisi.");
-					this.UIScene.dialogueManager.showDialogueBox();
-				}
-			},
-			callbackScope: this
-		});
+		if (this.scene.physics.world.overlap(this.go, this.scene.egg)) {
+			this.scene.egg.destroy();
+			this.UIScene.dialogueManager.queueMessages(this.messages);
+			this.UIScene.dialogueManager.showDialogueBox();
+			this.scene.state = "pause";
+		}
 	}
 }
