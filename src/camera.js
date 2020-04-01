@@ -6,6 +6,7 @@ class Camera {
 
 		this.go.startFollow(this.scene.player.go);
 
+		// Clamp camera to world bounds
 		this.go.setBounds(this.scene.grid.layer.x, 0, this.scene.grid.layer.width, this.scene.grid.layer.height);
 	}
 

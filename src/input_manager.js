@@ -20,57 +20,63 @@ class InputManager {
 	}
 
 	setupInputMap() {
+		// Movement directions for player class to reference
 		this.goLeft = false;
+		this.goRight = false;
+		this.goUp = false;
+		this.goDown = false;
+
+		// Event handlers for when movement input keys are in the down state
+		// Configured for arrow and WASD keys
 		this.controls.left.on("down", (key) => {
 			this.setLeftRightInput("down", "left");
 		});
-		this.controls.a.on("down", (key) => {
-			this.setLeftRightInput("down", "left");
-		});
-		this.controls.left.on("up", (key) => {
-			this.setLeftRightInput("up", "left");
-		});
-		this.controls.a.on("up", (key) => {
-			this.setLeftRightInput("up", "left");
-		});
-
-		this.goRight = false;
 		this.controls.right.on("down", (key) => {
 			this.setLeftRightInput("down", "right");
+		});
+		this.controls.up.on("down", (key) => {
+			this.setUpDownInput("down", "up");
+		});
+		this.controls.down.on("down", (key) => {
+			this.setUpDownInput("down", "down");
+		});
+		
+		this.controls.a.on("down", (key) => {
+			this.setLeftRightInput("down", "left");
 		});
 		this.controls.d.on("down", (key) => {
 			this.setLeftRightInput("down", "right");
 		});
-		this.controls.right.on("up", (key) => {
-			this.setLeftRightInput("up", "right");
-		});
-		this.controls.d.on("up", (key) => {
-			this.setLeftRightInput("up", "right");
-		});
-
-		this.goUp = false;
-		this.controls.up.on("down", (key) => {
-			this.setUpDownInput("down", "up");
-		});
 		this.controls.w.on("down", (key) => {
 			this.setUpDownInput("down", "up");
-		});
-		this.controls.up.on("up", (key) => {
-			this.setUpDownInput("up", "up");
-		});
-		this.controls.w.on("up", (key) => {
-			this.setUpDownInput("up", "up");
-		});
-
-		this.goDown = false;
-		this.controls.down.on("down", (key) => {
-			this.setUpDownInput("down", "down");
 		});
 		this.controls.s.on("down", (key) => {
 			this.setUpDownInput("down", "down");
 		});
+		
+		// Event handlers for when movement input keys are released
+		// Configured for arrow and WASD keys
+		this.controls.left.on("up", (key) => {
+			this.setLeftRightInput("up", "left");
+		});
+		this.controls.right.on("up", (key) => {
+			this.setLeftRightInput("up", "right");
+		});
+		this.controls.up.on("up", (key) => {
+			this.setUpDownInput("up", "up");
+		});
 		this.controls.down.on("up", (key) => {
 			this.setUpDownInput("up", "down");
+		});
+		
+		this.controls.a.on("up", (key) => {
+			this.setLeftRightInput("up", "left");
+		});
+		this.controls.d.on("up", (key) => {
+			this.setLeftRightInput("up", "right");
+		});
+		this.controls.w.on("up", (key) => {
+			this.setUpDownInput("up", "up");
 		});
 		this.controls.s.on("up", (key) => {
 			this.setUpDownInput("up", "down");
@@ -78,6 +84,7 @@ class InputManager {
 	}
 
 	setLeftRightInput(event, direction) {
+		// If the key is being pressed, set the left or right direction
 		if (event == "down") {
 			if (direction == "left") {
 				this.goLeft = true;
@@ -89,6 +96,8 @@ class InputManager {
 			}
 		}
 
+		// If the key is being released, unset the direction
+		// Then, if the other key is down, change to that direction
 		if (event == "up") {
 			if (direction == "left") {
 				this.goLeft = false;
@@ -108,6 +117,7 @@ class InputManager {
 	}
 
 	setUpDownInput(event, direction) {
+		// If the key is being pressed, set the up or down direction
 		if (event == "down") {
 			if (direction == "up") {
 				this.goUp= true;
@@ -119,6 +129,8 @@ class InputManager {
 			}
 		}
 
+		// If the key is being released, unset the direction
+		// Then, if the other key is down, change to that direction
 		if (event == "up") {
 			if (direction == "up") {
 				this.goUp = false;
