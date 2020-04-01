@@ -2,14 +2,15 @@ class Player {
 	constructor(scene) {
 		this.scene = scene;
 
-		this.go = this.scene.add.sprite(this.scene.cameras.main.width / 2, this.scene.cameras.main.height / 2, "player");
+		this.go = this.scene.add.sprite(this.scene.grid.data[24][12].x * this.scene.grid.map.tileWidth,
+										this.scene.grid.data[24][12].y * this.scene.grid.map.tileHeight,
+										"player");
+		this.go.setOrigin(0, 0);
 
 		this.scene.physicsManager.addToGroup(this.go, "dynamic");
 
 		this.go.body.setSize(this.go.body.width, this.go.body.height / 2, false);
 		this.go.body.setOffset(0, this.go.height / 2);
-
-		this.tilePosition = new Phaser.Math.Vector2(this.scene.grid.data[24][12].x, this.scene.grid.data[24][12].y);
 	}
 
 	update(dt) {
@@ -43,14 +44,11 @@ class Player {
 
 		this.moving = true;
 
-		this.tilePosition.x += dx;
-		this.tilePosition.y += dy;
-
 		this.scene.tweens.add({
 			targets: this.go,
 			x: this.go.x + dx * this.scene.grid.map.tileWidth,
 			y: this.go.y + dy * this.scene.grid.map.tileHeight,
-			duration: 200,
+			duration: 100,
 			ease: "Linear",
 			onComplete: this.onComplete,
 			onCompleteScope: this

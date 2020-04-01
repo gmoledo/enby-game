@@ -3,7 +3,7 @@ class Grid {
 		this.scene = scene;
 
 		this.map = this.scene.make.tilemap({ key: "map" });
-		this.tiles = this.map.addTilesetImage("Tiled_TestTileset", "tiles");
+		this.tiles = this.map.addTilesetImage("Tiled_TestTileset", "tiles", 20, 20, 1, 2);
 		this.layer = this.map.createStaticLayer(0, this.tiles, -160, 0);
 
 		this.data = new Array(this.map.width);
