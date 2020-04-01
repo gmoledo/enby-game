@@ -11,7 +11,7 @@ class TestScene extends Phaser.Scene {
 	}
 
 	create() {
-		this.inputManager = new InputManager(this, ["esc"]);
+		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d"]);
 
 		this.physicsManager = new PhysicsManager(this);
 

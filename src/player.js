@@ -11,6 +11,20 @@ class Player {
 	}
 
 	update(dt) {
-		
+		this.go.body.setVelocity(0, 0);
+
+		if (this.scene.inputManager.goLeft) {
+			this.go.body.setVelocity(-100, this.go.body.velocity.y);
+		}
+		if (this.scene.inputManager.goRight) {
+			this.go.body.setVelocity(100, this.go.body.velocity.y);
+		}
+
+		if (this.scene.inputManager.goUp) {
+			this.go.body.setVelocity(this.go.body.velocity.x, -100);
+		}
+		if (this.scene.inputManager.goDown) {
+			this.go.body.setVelocity(this.go.body.velocity.x, 100);
+		}
 	}
 }
