@@ -88,8 +88,16 @@ class Player {
 	}
 
 	checkEgg() {
-		if (this.scene.physics.world.overlap(this.go, this.scene.egg)) {
-			this.scene.egg.destroy();
-		}
+		this.scene.time.addEvent({
+			delay: 1,
+			callback: () => {
+				if (this.scene.physics.world.overlap(this.go, this.scene.egg)) {
+					this.scene.egg.destroy();
+					console.log(this.scene.scene.get("UIScene"));
+					this.scene.scene.get("UIScene").dialogueManager.createDialogueBox();
+				}
+			},
+			callbackScope: this
+		});
 	}
 }

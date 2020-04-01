@@ -1,6 +1,6 @@
 class TestScene extends Phaser.Scene {
 	constructor() {
-		super("TestScene");
+		super({key: "TestScene", active: true});
 
 		// States for changing game behavior
 		this.states = ["gameplay", "edit"];
@@ -11,11 +11,13 @@ class TestScene extends Phaser.Scene {
 	preload() {
 		this.load.image("player", "assets/player.png");
 		this.load.image("egg", "assets/egg.png");
+
 		this.load.image("tiles", "TestTileset.png");
 		this.load.tilemapTiledJSON("map", "TestMap.json");
 	}
 
 	create() {
+		console.log(this.cameras.main);
 		// Class for handling input related logic
 		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d"]);
 
