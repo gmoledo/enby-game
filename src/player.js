@@ -11,6 +11,11 @@ class Player {
 										"player");
 		this.go.setOrigin(0, 0.5);
 
+		this.scene.physicsManager.addToGroup(this.go, "dynamic");
+
+		this.go.body.setSize(this.go.body.width, this.go.body.height / 2, false);
+		this.go.body.setOffset(0, this.go.height / 2);
+
 		// Tween for moving player
 		this.moveTween = this.scene.tweens.create({targets: this.go});
 	}
@@ -58,8 +63,6 @@ class Player {
 				}
 			}
 		}
-
-
 	}
 
 	move(dx, dy) {
@@ -78,7 +81,15 @@ class Player {
 			x: this.go.x + dx * this.scene.grid.map.tileWidth,
 			y: this.go.y + dy * this.scene.grid.map.tileHeight,
 			duration: 100,
-			ease: "Linear"
+			ease: "Linear",
+			onComplete: this.checkEgg,
+			onCompleteScope: this
 		});
+	}
+
+	checkEgg() {
+		if (this.scene.physics.world.overlap(this.go, this.scene.egg)) {
+			this.scene.egg.destroy();
+		}
 	}
 }

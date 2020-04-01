@@ -10,6 +10,7 @@ class TestScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image("player", "assets/player.png");
+		this.load.image("egg", "assets/egg.png");
 		this.load.image("tiles", "TestTileset.png");
 		this.load.tilemapTiledJSON("map", "TestMap.json");
 	}
@@ -29,6 +30,12 @@ class TestScene extends Phaser.Scene {
 
 		// Camera Class
 		this.camera = new Camera(this);
+
+		this.egg = this.add.sprite(	10 * this.grid.map.tileWidth + this.grid.layer.x,
+									14 * this.grid.map.tileHeight,
+									"egg");
+		this.egg.setOrigin(0, 0);
+		this.physicsManager.addToGroup(this.egg, "static");
 	}
 
 	update(time, delta) {
