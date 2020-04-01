@@ -8,12 +8,16 @@ class TestScene extends Phaser.Scene {
 
 	preload() {
 		this.load.image("player", "assets/player.png");
+		this.load.image("tiles", "TestTileset.png");
+		this.load.tilemapTiledJSON("map", "TestMap.json");
 	}
 
 	create() {
 		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d"]);
 
 		this.physicsManager = new PhysicsManager(this);
+
+		this.grid = new Grid(this);
 
 		this.player = new Player(this);
 
