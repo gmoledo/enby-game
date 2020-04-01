@@ -1,7 +1,7 @@
 class Player {
 	constructor(scene) {
 		this.scene = scene;
-
+		this.UIScene = this.scene.scene.get("UIScene");
 		// Grid position of player
 		this.tilePos = new Phaser.Math.Vector2(23, 15);
 
@@ -93,8 +93,8 @@ class Player {
 			callback: () => {
 				if (this.scene.physics.world.overlap(this.go, this.scene.egg)) {
 					this.scene.egg.destroy();
-					console.log(this.scene.scene.get("UIScene"));
-					this.scene.scene.get("UIScene").dialogueManager.createDialogueBox();
+					this.UIScene.dialogueManager.queueMessage("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a ipsum id enim auctor vulputate eu vel mi. Donec id neque semper tellus eleifend sodales. Sed sed sem varius, convallis sapien non, elementum tellus. Donec at venenatis mauris. Nullam eget purus at justo laoreet tincidunt id luctus nisi.");
+					this.UIScene.dialogueManager.showDialogueBox();
 				}
 			},
 			callbackScope: this
