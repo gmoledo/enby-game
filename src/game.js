@@ -1,14 +1,23 @@
+var renderConfig = {
+	antialias: false,
+	roundPixels: true
+}
+
 var config = {
 	type: Phaser.AUTO,
-	width: 640,
-	height: 360,
+	scale: {
+		width: 1280,
+		height: 720,
+		autoCenter: Phaser.Scale.Center.CENTER_BOTH
+	},
 	scene: [TestScene, UIScene],
 	physics: {
 		default: "arcade",
 		arcade: {
-			debug: true
+			debug: false
 		} 
-	}
+	},
+	render: renderConfig
 };
 
 var game = new Phaser.Game(config);

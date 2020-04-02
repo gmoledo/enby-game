@@ -8,8 +8,14 @@ class InputManager {
 			this.addInput(control);
 		});
 
-		this.controls.esc.on("down", (key) => {
-			this.scene.stateIndex = (this.scene.stateIndex + 1) % this.scene.states.length;
+		this.controls.enter.on("up", (key) => {
+			if (this.scene.scale.isFullscreen) {
+				this.scene.scale.stopFullscreen();
+			}
+			else {
+				this.scene.scale.startFullscreen();
+				this.scene.game.canvas.parentElement.style.backgroundColor = "#aaaaaa";
+			}
 		});
 
 		this.setupInputMap();

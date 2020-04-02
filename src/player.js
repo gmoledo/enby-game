@@ -3,7 +3,7 @@ class Player {
 		this.scene = scene;
 		this.UIScene = this.scene.scene.get("UIScene");
 		// Grid position of player
-		this.tilePos = new Phaser.Math.Vector2(23, 15);
+		this.tilePos = new Phaser.Math.Vector2(23, 8);
 
 		// Instantiate Phaser game object representing player
 		this.go = this.scene.add.sprite(this.tilePos.x * this.scene.grid.map.tileWidth + this.scene.grid.layer.x,
@@ -13,8 +13,8 @@ class Player {
 
 		this.scene.physicsManager.addToGroup(this.go, "dynamic");
 
-		this.go.body.setSize(this.go.body.width, this.go.body.height / 2, false);
-		this.go.body.setOffset(0, this.go.height / 2);
+		this.go.body.setSize(this.go.width * 2/3, this.go.height / 2 * 2/3, false);
+		this.go.body.setOffset(this.go.width * 1/6, this.go.height / 2 + this.go.height / 2 * 1/6);
 
 		// Tween for moving player
 		this.moveTween = this.scene.tweens.create({targets: this.go});
@@ -46,7 +46,7 @@ class Player {
 		if (!this.moveTween.isPlaying()) {
 			// ...check the destination tile for collision. If not...
 			let nextTile = this.scene.grid.map.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
-			if (!nextTile.properties.Collision) {
+			if (nextTile && !nextTile.properties.Collision) {
 				// ...move.
 				this.move(moveX, moveY);
 			} 
@@ -55,12 +55,12 @@ class Player {
 				// ...check if you can move vertically or horizontally alone.
 				// If you can, move.
 				nextTile = this.scene.grid.map.getTileAt(this.tilePos.x, this.tilePos.y + moveY);
-				if (!nextTile.properties.Collision) {
+				if (nextTile && !nextTile.properties.Collision) {
 					this.move(0, moveY);
 				}
 
 				nextTile = this.scene.grid.map.getTileAt(this.tilePos.x + moveX, this.tilePos.y);
-				if (!nextTile.properties.Collision) {
+				if (nextTile && !nextTile.properties.Collision) {
 					this.move(moveX, 0);
 				}
 			}
