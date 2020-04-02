@@ -7,6 +7,7 @@ class DialogueManager {
 													"dialogue_box");
 		this.dialogueBox.setVisible(false);
 
+
 		let dialogueTextConfig = {
 			color: "#ffffff",
 			wordWrap: {
@@ -19,20 +20,32 @@ class DialogueManager {
 												"",
 												dialogueTextConfig);
 		this.dialogueText.setLineSpacing(4);
+
+
 		this.messageQueue = [];
 		this.queued = false;
 	}
 
-	showDialogueBox() {
-		this.dialogueBox.setVisible(true);
-		if (this.messageQueue[0]) {
-			this.dialogueText.setText(this.messageQueue[0]);
-			this.scene.time.addEvent({delay: 300, callback: () => {this.queued = true;}});
+	showMessage() {
+		if (!this.dialogueBox.visible) {
+			this.dialogueBox.setVisible(true);
 		}
-		else {
-			this.queued = false;
-			this.scene.scene.resume("TestScene");
+
+
+		this.scene.time.addEvent({
+			repeat: this.messageQueue[0].length - 1,
+			callback: this.addLetter,
+			callbackScope: this,
+			delay: 50
+		});
+	}
+
+	addLetter() {
+		let displayText = this.messageQueue[0].substring(0, this.dialogueText.text.length+1);
+		if (displayText == this.messageQueue[0]) {
+			this.queued = true;
 		}
+		this.dialogueText.setText(displayText);
 	}
 
 	queueMessages(messages) {
@@ -43,19 +56,29 @@ class DialogueManager {
 		messages.forEach((message) => {
 			this.messageQueue.push(message);
 		});
+
+		if (this.messageQueue.length > 0) {
+			this.showMessage();
+		}
 	}
 
 	dequeueMessage() {
 		this.queued = false;
 		this.messageQueue.shift();
+		this.dialogueText.text = "";
+
 		if (this.messageQueue.length === 0) {
-			this.dialogueBox.setVisible(false);
-			this.dialogueText.text = "";
-			this.scene.TestScene.state = "play";
+			this.closeDialogueBox();
 		}
 		else {
-			this.showDialogueBox();
+			this.showMessage();
 		}
+	}
+
+	closeDialogueBox() {
+		this.dialogueBox.setVisible(false);
+		this.dialogueText.text = "";
+		this.scene.TestScene.state = "play";
 	}
 
 	update(dt) {

@@ -93,7 +93,6 @@ class Player {
 		if (this.scene.physics.world.overlap(this.go, this.scene.egg)) {
 			this.scene.egg.destroy();
 			this.UIScene.dialogueManager.queueMessages(this.messages);
-			this.UIScene.dialogueManager.showDialogueBox();
 			this.scene.state = "pause";
 		}
 	}
