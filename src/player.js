@@ -19,7 +19,7 @@ class Player {
 		// Tween for moving player
 		this.moveTween = this.scene.tweens.create({targets: this.go});
 
-		this.messages = ["Message 1", "This is message 2", "This is the final message.\nGot it?"];
+		
 	}
 
 	update(dt) {
@@ -54,14 +54,14 @@ class Player {
 			else {
 				// ...check if you can move vertically or horizontally alone.
 				// If you can, move.
-				nextTile = this.scene.grid.map.getTileAt(this.tilePos.x + moveX, this.tilePos.y);
-				if (!nextTile.properties.Collision) {
-					this.move(moveX, 0);
-				}
-
 				nextTile = this.scene.grid.map.getTileAt(this.tilePos.x, this.tilePos.y + moveY);
 				if (!nextTile.properties.Collision) {
 					this.move(0, moveY);
+				}
+
+				nextTile = this.scene.grid.map.getTileAt(this.tilePos.x + moveX, this.tilePos.y);
+				if (!nextTile.properties.Collision) {
+					this.move(moveX, 0);
 				}
 			}
 		}
@@ -84,16 +84,16 @@ class Player {
 			y: this.go.y + dy * this.scene.grid.map.tileHeight,
 			duration: 100,
 			ease: "Linear",
-			onComplete: this.checkEgg,
-			onCompleteScope: this
+			onComplete: () => {
+				let eggGOs = this.scene.eggs.map((egg) => egg.go);
+				this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this);
+			}
 		});
 	}
 
-	checkEgg() {
-		if (this.scene.physics.world.overlap(this.go, this.scene.egg)) {
-			this.scene.egg.destroy();
-			this.UIScene.dialogueManager.queueMessages(this.messages);
-			this.scene.state = "pause";
-		}
+	getEgg(player, egg) {
+		egg.destroy();
+		this.UIScene.dialogueManager.queueMessages(Egg.messages[Egg.messageIndex++]);
+		this.scene.state = "pause";
 	}
 }

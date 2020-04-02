@@ -34,11 +34,9 @@ class TestScene extends Phaser.Scene {
 		// Camera Class
 		this.camera = new Camera(this);
 
-		this.egg = this.add.sprite(	10 * this.grid.map.tileWidth + this.grid.layer.x,
-									14 * this.grid.map.tileHeight,
-									"egg");
-		this.egg.setOrigin(0, 0);
-		this.physicsManager.addToGroup(this.egg, "static");
+		this.eggs = [];
+		this.eggs.push(new Egg(this, 2, 2));
+		this.eggs.push(new Egg(this, 40, 10));
 	}
 
 	update(time, delta) {
