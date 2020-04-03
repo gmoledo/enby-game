@@ -64,6 +64,14 @@ class Player {
 						moveX = 1;
 						moveY = 0;
 					}
+					if (tile.properties.Direction == "Up") {
+						moveX = 0;
+						moveY = -1;
+					}
+					if (tile.properties.Direction == "Down") {
+						moveX = 0;
+						moveY = 1;
+					}
 				}
 			}
 		}

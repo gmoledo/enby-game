@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="34" height="18" tilewidth="40" tileheight="40" infinite="0" nextlayerid="2" nextobjectid="1">
+ <editorsettings>
+  <export target="RoomMap.json" format="json"/>
+ </editorsettings>
+ <tileset firstgid="1" name="Tiled_Tileset" tilewidth="40" tileheight="40" spacing="2" margin="1" tilecount="225" columns="15">
+  <image source="Tileset.png" trans="ff00ff" width="630" height="630"/>
+  <tile id="8">
+   <properties>
+    <property name="Collision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="Collision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="Collision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="Direction" value="Down"/>
+    <property name="Map" value="House"/>
+    <property name="TeleportY" type="int" value="4"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="Collision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="Collision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="Collision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="Collision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="39">
+   <properties>
+    <property name="Collision" type="bool" value="true"/>
+   </properties>
+  </tile>
+  <tile id="40">
+   <properties>
+    <property name="Collision" type="bool" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="34" height="18">
+  <data encoding="csv">
+25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,
+25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,
+25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,
+25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,
+25,25,25,25,25,25,25,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,25,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,3,3,3,3,3,3,39,40,41,3,3,3,3,3,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,3,3,3,3,3,3,3,3,3,3,3,9,10,11,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,3,3,3,3,3,3,3,3,3,3,3,24,25,26,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,3,3,3,3,3,3,3,3,3,3,3,39,40,41,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,9,10,10,11,3,3,3,3,3,3,3,3,3,3,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,39,40,40,41,3,3,3,3,3,3,3,3,3,3,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,26,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,24,25,25,25,25,25,25,25,
+25,25,25,25,25,25,25,10,10,10,10,10,10,10,10,11,3,9,10,10,10,10,10,10,10,10,25,25,25,25,25,25,25,25,
+25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,26,20,24,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25
+</data>
+ </layer>
+</map>

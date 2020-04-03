@@ -62,7 +62,8 @@ class TestScene extends Phaser.Scene {
 		this.load.image("tiles", "Tileset.png");
 		this.load.tilemapTiledJSON("map", "Map.json");
 		this.load.tilemapTiledJSON("townMap", "TownMap.json");
-		this.load.tilemapTiledJSON("forestMap", "forestMap.json");
+		this.load.tilemapTiledJSON("forestMap", "ForestMap.json");
+		this.load.tilemapTiledJSON("roomMap", "RoomMap.json")
 
 	}
 
