@@ -4,7 +4,7 @@ class TestScene extends Phaser.Scene {
 
 		// States for changing game behavior
 		this.states = ["play", "pause", "script"];
-		this.stateIndex = 2;
+		this.stateIndex = 0;
 		this.state = this.states[this.stateIndex];
 	}
 
@@ -61,6 +61,9 @@ class TestScene extends Phaser.Scene {
 
 		this.load.image("tiles", "Tileset.png");
 		this.load.tilemapTiledJSON("map", "Map.json");
+		this.load.tilemapTiledJSON("townMap", "TownMap.json");
+		this.load.tilemapTiledJSON("forestMap", "forestMap.json");
+
 	}
 
 	create() {
@@ -82,8 +85,6 @@ class TestScene extends Phaser.Scene {
 		this.eggs = [];
 		this.eggs.push(new Egg(this, 4, 4));
 		this.eggs.push(new Egg(this, 20, 10));
-
-		this.player.playScript("intro");
 	}
 
 	update(time, delta) {

@@ -6,8 +6,8 @@ class Player {
 		this.tilePos = new Phaser.Math.Vector2(15, 5);
 
 		// Instantiate Phaser game object representing player
-		this.go = this.scene.add.sprite(this.tilePos.x * this.scene.grid.map.tileWidth + this.scene.grid.layer.x,
-										this.tilePos.y * this.scene.grid.map.tileHeight,
+		this.go = this.scene.add.sprite(this.tilePos.x * this.scene.grid.currentMap.tileWidth + this.scene.grid.layer.x,
+										this.tilePos.y * this.scene.grid.currentMap.tileHeight,
 										"player");
 		this.go.setOrigin(0, 0.5);
 
@@ -47,17 +47,31 @@ class Player {
 		if (this.tweening) {
 			if (this.go.x == this.targetPos.x && this.go.y == this.targetPos.y) {
 				this.tweening = false;
+
 		 		let eggGOs = this.scene.eggs.map((egg) => egg.go);
 		 		if (this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this)) {
 		 			return;
 		 		}
+
+		 		let tile = this.scene.grid.currentMap.getTileAt(this.tilePos.x, this.tilePos.y);
+				if (tile.properties.Map) {
+					this.scene.grid.changeMap(tile.properties);
+					if (tile.properties.Direction == "Left") {
+						moveX = -1;
+						moveY = 0;
+					}
+					if (tile.properties.Direction == "Right") {
+						moveX = 1;
+						moveY = 0;
+					}
+				}
 			}
 		}
 
 		// If you're not in between tiles...
 		if (!this.tweening) {
 			// ...check the destination tile for collision. If not...
-			let nextTile = this.scene.grid.map.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
+			let nextTile = this.scene.grid.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
 			if (nextTile && !nextTile.properties.Collision) {
 				// ...move.
 				this.move(moveX, moveY);
@@ -66,15 +80,19 @@ class Player {
 			else {
 				// ...check if you can move vertically or horizontally alone.
 				// If you can, move.
-				nextTile = this.scene.grid.map.getTileAt(this.tilePos.x, this.tilePos.y + moveY);
+				nextTile = this.scene.grid.currentMap.getTileAt(this.tilePos.x, this.tilePos.y + moveY);
 				if (nextTile && !nextTile.properties.Collision) {
 					this.move(0, moveY);
 				}
 
-				nextTile = this.scene.grid.map.getTileAt(this.tilePos.x + moveX, this.tilePos.y);
+				nextTile = this.scene.grid.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y);
 				if (nextTile && !nextTile.properties.Collision) {
 					this.move(moveX, 0);
 				}
+			}
+
+			if (!nextTile) {
+				this.move(moveX, moveY);
 			}
 		}
 		else {
@@ -94,8 +112,8 @@ class Player {
 
 		// Set tween to move between tile coordinates
 		this.startPos = new Phaser.Math.Vector2(this.go.x, this.go.y);
-		this.targetPos = new Phaser.Math.Vector2(	this.go.x + dx * this.scene.grid.map.tileWidth,
-													this.go.y + dy * this.scene.grid.map.tileHeight);
+		this.targetPos = new Phaser.Math.Vector2(	this.go.x + dx * this.scene.grid.currentMap.tileWidth,
+													this.go.y + dy * this.scene.grid.currentMap.tileHeight);
 		this.tweening = true;
 		this.tweenMovement();
 	}
@@ -130,18 +148,18 @@ class Player {
 		if (script == "intro") {
 			let tweens = [
 				{
-					x: 15 * this.scene.grid.map.tileWidth,
-					y: 10 * this.scene.grid.map.tileHeight,
+					x: 15 * this.scene.grid.currentMap.tileWidth,
+					y: 10 * this.scene.grid.currentMap.tileHeight,
 					duration: 1000,
 				},
 				{
-					x: 11 * this.scene.grid.map.tileWidth,
-					y: 10 * this.scene.grid.map.tileHeight,
+					x: 11 * this.scene.grid.currentMap.tileWidth,
+					y: 10 * this.scene.grid.currentMap.tileHeight,
 					duration: 800
 				},
 				{
-					x: 19 * this.scene.grid.map.tileWidth,
-					y: 10 * this.scene.grid.map.tileHeight,
+					x: 19 * this.scene.grid.currentMap.tileWidth,
+					y: 10 * this.scene.grid.currentMap.tileHeight,
 					duration: 1600
 				}
 			];
