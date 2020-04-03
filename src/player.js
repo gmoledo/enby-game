@@ -18,7 +18,8 @@ class Player {
 
 		// Tween for moving player
 		this.moveTween = this.scene.tweens.create({targets: this.go});
-
+		this.startPos = new Phaser.Math.Vector2(0, 0);
+		this.targetPos = new Phaser.Math.Vector2(0, 0);
 		
 	}
 
@@ -42,8 +43,17 @@ class Player {
 			moveY = 1;
 		}
 
+
+		if (this.tweening) {
+			if (this.go.x == this.targetPos.x && this.go.y == this.targetPos.y) {
+				this.tweening = false;
+		 		let eggGOs = this.scene.eggs.map((egg) => egg.go);
+		 		this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this);
+			}
+		}
+
 		// If you're not in between tiles...
-		if (!this.moveTween.isPlaying()) {
+		if (!this.tweening) {
 			// ...check the destination tile for collision. If not...
 			let nextTile = this.scene.grid.map.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
 			if (nextTile && !nextTile.properties.Collision) {
@@ -65,6 +75,9 @@ class Player {
 				}
 			}
 		}
+		else {
+			this.tweenMovement();
+		}
 	}
 
 	move(dx, dy) {
@@ -78,17 +91,31 @@ class Player {
 		this.tilePos.y += dy;
 
 		// Set tween to move between tile coordinates
-		this.moveTween = this.scene.tweens.add({
-			targets: this.go,
-			x: this.go.x + dx * this.scene.grid.map.tileWidth,
-			y: this.go.y + dy * this.scene.grid.map.tileHeight,
-			duration: 100,
-			ease: "Linear",
-			onComplete: () => {
-				let eggGOs = this.scene.eggs.map((egg) => egg.go);
-				this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this);
-			}
-		});
+		this.startPos = new Phaser.Math.Vector2(this.go.x, this.go.y);
+		this.targetPos = new Phaser.Math.Vector2(	this.go.x + dx * this.scene.grid.map.tileWidth,
+													this.go.y + dy * this.scene.grid.map.tileHeight);
+		this.tweening = true;
+		this.tweenMovement();
+	}
+
+	tweenMovement() {
+		let difference = new Phaser.Math.Vector2(this.targetPos.x - this.startPos.x, this.targetPos.y - this.startPos.y);
+		
+		let stepX = this.go.x + difference.x * 10 * this.scene.game.loop.delta / 1000;
+		if (this.targetPos.x > this.startPos.x) {
+			this.go.x = Math.min(stepX, this.targetPos.x);
+		}
+		else {
+			this.go.x = Math.max(stepX, this.targetPos.x);
+		}
+
+		let stepY = this.go.y + difference.y * 10 * this.scene.game.loop.delta / 1000;
+		if (this.targetPos.y > this.startPos.y) {
+			this.go.y = Math.min(stepY, this.targetPos.y);
+		}
+		else {
+			this.go.y = Math.max(stepY, this.targetPos.y);
+		}
 	}
 
 	getEgg(player, egg) {
