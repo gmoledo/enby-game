@@ -4,7 +4,7 @@ class TestScene extends Phaser.Scene {
 
 		// States for changing game behavior
 		this.states = ["play", "pause", "script"];
-		this.stateIndex = 2;
+		this.stateIndex = 0;
 		this.state = this.states[this.stateIndex];
 	}
 
@@ -56,7 +56,7 @@ class TestScene extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.image("player", "assets/player.png");
+		this.load.spritesheet("playerBase", "assets/player_base.png", { frameWidth: 40, frameHeight: 80 });
 		this.load.image("egg", "assets/egg.png");
 
 		this.load.image("tiles", "Tileset.png");
@@ -90,13 +90,13 @@ class TestScene extends Phaser.Scene {
 		this.cameras.main.setRenderToTexture(this.customPipeline);
 
 
-		this.time.addEvent({
-			delay: 1000,
-			callback: () => {
-				this.mom.playScript("intro");
-				this.player.playScript("intro");
-			}
-		});
+		// this.time.addEvent({
+		// 	delay: 1000,
+		// 	callback: () => {
+		// 		this.mom.playScript("intro");
+		// 		this.player.playScript("intro");
+		// 	}
+		// });
 	}
 
 	update(time, delta) {

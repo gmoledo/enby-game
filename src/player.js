@@ -2,13 +2,14 @@ class Player {
 	constructor(scene) {
 		this.scene = scene;
 		this.UIScene = this.scene.scene.get("UIScene");
+
 		// Grid position of player
 		this.tilePos = new Phaser.Math.Vector2(21, 11);
 
 		// Instantiate Phaser game object representing player
 		this.go = this.scene.add.sprite(this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x,
 										this.tileToWorldPos(this.tilePos.x, this.tilePos.y).y,
-										"player");
+										"playerBase");
 		this.go.setOrigin(0, 0.5);
 
 		this.scene.physicsManager.addToGroup(this.go, "dynamic");
@@ -29,18 +30,18 @@ class Player {
 		let moveY = 0;
 
 		// Move left or right depending on input
-		if (this.scene.inputManager.goLeft) {
+		if (this.scene.inputManager.input == "left") {
 			moveX = -1;
 		}
-		if (this.scene.inputManager.goRight) {
+		if (this.scene.inputManager.input == "right") {
 			moveX = 1;
 		}
 
 		// Move up or down depending on input
-		if (this.scene.inputManager.goUp) {
+		if (this.scene.inputManager.input == "up") {
 			moveY = -1;
 		}
-		if (this.scene.inputManager.goDown) {
+		if (this.scene.inputManager.input == "down") {
 			moveY = 1;
 		}
 
@@ -113,6 +114,19 @@ class Player {
 		// If there is no motion, just return.
 		if (dx == 0 && dy == 0) {
 			return;
+		}
+
+		if (dx == 1) {
+			this.setFrame(3);
+		}
+		if (dx == -1) {
+			this.setFrame(1);
+		}
+		if (dy == 1) {
+			this.setFrame(0);
+		}
+		if (dy == -1) {
+			this.setFrame(2);
 		}
 
 		// Update tile coordinates
