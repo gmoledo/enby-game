@@ -3,8 +3,8 @@ class TestScene extends Phaser.Scene {
 		super({key: "TestScene", active: true});
 
 		// States for changing game behavior
-		this.states = ["play", "pause"];
-		this.stateIndex = 0;
+		this.states = ["play", "pause", "script"];
+		this.stateIndex = 2;
 		this.state = this.states[this.stateIndex];
 	}
 
@@ -82,6 +82,8 @@ class TestScene extends Phaser.Scene {
 		this.eggs = [];
 		this.eggs.push(new Egg(this, 4, 4));
 		this.eggs.push(new Egg(this, 20, 10));
+
+		this.player.playScript("intro");
 	}
 
 	update(time, delta) {

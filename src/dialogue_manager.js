@@ -67,7 +67,7 @@ class DialogueManager {
 		this.letterRevealEvent.remove();
 		this.dialogueText.setText(this.messageQueue[0]);
 		this.scene.time.addEvent({
-			delay: 500,
+			delay: 300,
 			callback: () => {
 				this.queued = true;
 			}
@@ -90,7 +90,12 @@ class DialogueManager {
 	closeDialogueBox() {
 		this.dialogueBox.setVisible(false);
 		this.dialogueText.text = "";
-		this.scene.TestScene.state = "play";
+		this.scene.time.addEvent({
+			delay: 100,
+			callback: () => {
+				this.scene.TestScene.state = "play";
+			}
+		});
 	}
 
 	update(dt) {

@@ -3,7 +3,7 @@ class Player {
 		this.scene = scene;
 		this.UIScene = this.scene.scene.get("UIScene");
 		// Grid position of player
-		this.tilePos = new Phaser.Math.Vector2(23, 8);
+		this.tilePos = new Phaser.Math.Vector2(15, 5);
 
 		// Instantiate Phaser game object representing player
 		this.go = this.scene.add.sprite(this.tilePos.x * this.scene.grid.map.tileWidth + this.scene.grid.layer.x,
@@ -48,7 +48,9 @@ class Player {
 			if (this.go.x == this.targetPos.x && this.go.y == this.targetPos.y) {
 				this.tweening = false;
 		 		let eggGOs = this.scene.eggs.map((egg) => egg.go);
-		 		this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this);
+		 		if (this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this)) {
+		 			return;
+		 		}
 			}
 		}
 
@@ -122,5 +124,37 @@ class Player {
 		egg.destroy();
 		this.UIScene.dialogueManager.queueMessages(Egg.messages[Egg.messageIndex++]);
 		this.scene.state = "pause";
+	}
+
+	playScript(script) {
+		if (script == "intro") {
+			let tweens = [
+				{
+					x: 15 * this.scene.grid.map.tileWidth,
+					y: 10 * this.scene.grid.map.tileHeight,
+					duration: 1000,
+				},
+				{
+					x: 11 * this.scene.grid.map.tileWidth,
+					y: 10 * this.scene.grid.map.tileHeight,
+					duration: 800
+				},
+				{
+					x: 19 * this.scene.grid.map.tileWidth,
+					y: 10 * this.scene.grid.map.tileHeight,
+					duration: 1600
+				}
+			];
+			this.scene.tweens.timeline({
+				tweens: tweens,
+				targets: this.go,
+				ease: "Linear",
+				onComplete: () => {
+					this.tilePos.x = 19;
+					this.tilePos.y = 10;
+					this.scene.state = "play";
+				}
+			});
+		}
 	}
 }

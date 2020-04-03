@@ -5,7 +5,7 @@ class Grid {
 		// Tilemap setup
 		this.map = this.scene.make.tilemap({ key: "map" });
 		this.tiles = this.map.addTilesetImage("Tiled_Tileset", "tiles", 40, 40, 1, 2);
-		this.layer = this.map.createStaticLayer(0, this.tiles, -160, 0);
+		this.layer = this.map.createStaticLayer(0, this.tiles, 0, 0);
 
 		// Array of arrays representing grid
 		this.data = new Array(this.map.width);
