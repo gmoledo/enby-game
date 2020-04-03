@@ -24,15 +24,16 @@ class DialogueManager {
 
 		this.messageQueue = [];
 		this.queued = false;
+		this.letterRevealEvent = null;
 	}
 
 	showMessage() {
 		if (!this.dialogueBox.visible) {
 			this.dialogueBox.setVisible(true);
 		}
+		this.revealingLetters = true;
 
-
-		this.scene.time.addEvent({
+		this.letterRevealEvent = this.scene.time.addEvent({
 			repeat: this.messageQueue[0].length - 1,
 			callback: this.addLetter,
 			callbackScope: this,
@@ -62,6 +63,17 @@ class DialogueManager {
 		}
 	}
 
+	skipMessage() {
+		this.letterRevealEvent.remove();
+		this.dialogueText.setText(this.messageQueue[0]);
+		this.scene.time.addEvent({
+			delay: 500,
+			callback: () => {
+				this.queued = true;
+			}
+		})
+	}
+
 	dequeueMessage() {
 		this.queued = false;
 		this.messageQueue.shift();
@@ -82,12 +94,14 @@ class DialogueManager {
 	}
 
 	update(dt) {
+		if (this.letterRevealEvent && this.letterRevealEvent.getOverallProgress() < 1 && this.letterRevealEvent.getOverallProgress() > 0.2) {
+			if (this.scene.inputManager.anyKeyDown()) {
+				this.skipMessage();
+			}
+		}
 		if (this.queued) {
-			for (let control in this.scene.inputManager.controls) {
-				if (this.scene.inputManager.controls[control].isDown) {
-					this.dequeueMessage();
-					break;
-				}
+			if (this.scene.inputManager.anyKeyDown()) {
+				this.dequeueMessage();
 			}
 		}
 	}

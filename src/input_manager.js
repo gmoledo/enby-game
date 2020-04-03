@@ -154,4 +154,12 @@ class InputManager {
 			}
 		}
 	}
+
+	anyKeyDown() {
+		for (let control in this.controls) {
+			if (this.controls[control].isDown) {
+				return true;
+			}
+		}
+	}
 }
