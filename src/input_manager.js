@@ -8,7 +8,7 @@ class InputManager {
 			this.addInput(control);
 		});
 
-		this.controls.enter.on("up", (key) => {
+		this.controls.f.on("up", (key) => {
 			if (this.scene.scale.isFullscreen) {
 				this.scene.scale.stopFullscreen();
 			}

@@ -19,9 +19,10 @@ class Grid {
 		this.roomTiles = this.roomMap.addTilesetImage("Tiled_Tileset", "tiles", 40, 40, 1, 2);
 		this.roomLayer = this.roomMap.createStaticLayer(0, this.tiles, 0, -1000);
 
-		this.maps = [this.map, this.townMap];
-		this.currentMap = this.map;
 
+		this.currentMap;
+		this.currentLayer;
+		this.setCurrentMap(this.roomMap);
 
 
 		// Array of arrays representing grid
@@ -81,6 +82,10 @@ class Grid {
 			this.scene.player.tilePos.y = this.currentMap.height - 1;
 		}
 
+
+		if(tileProperties.TeleportX) {
+			this.scene.player.tilePos.x = tileProperties.TeleportX;
+		}
 		if (tileProperties.TeleportY) {
 			this.scene.player.tilePos.y = tileProperties.TeleportY;
 		}

@@ -4,7 +4,7 @@ class TestScene extends Phaser.Scene {
 
 		// States for changing game behavior
 		this.states = ["play", "pause", "script"];
-		this.stateIndex = 0;
+		this.stateIndex = 2;
 		this.state = this.states[this.stateIndex];
 	}
 
@@ -30,7 +30,7 @@ class TestScene extends Phaser.Scene {
 						{
 							vec4 pixel = texture2D(uMainSampler, outTexCoord);
 						    
-						    vec4 white = vec4(1.0, 1.0, 1.0, 1.0);
+						    vec4 white = vec4(0.8, 0.8, 0.8, 1.0);
 						    vec4 black = vec4(0.0, 0.0, 0, 1.0);
 						    
 							float average = (pixel.r + pixel.g + pixel.b) / 3.0;
@@ -52,7 +52,7 @@ class TestScene extends Phaser.Scene {
 		});
 
 		// Class for handling input related logic
-		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d", "enter"]);
+		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d", "enter", "f"]);
 	}
 
 	preload() {
@@ -74,8 +74,14 @@ class TestScene extends Phaser.Scene {
 		// Class for handling tilemap and grid-related structures and logic
 		this.grid = new Grid(this);
 
+		this.eggs = [];
+		this.eggs.push(new Egg(this, 4, 4));
+		this.eggs.push(new Egg(this, 20, 10));
+		
 		// Player Class
 		this.player = new Player(this);
+
+		this.mom = new Mom(this);
 
 		// Camera Class
 		this.camera = new Camera(this);
@@ -83,9 +89,14 @@ class TestScene extends Phaser.Scene {
 		this.customPipeline = game.renderer.addPipeline("BlackAndWhite", new this.BlackWhitePipeline(game));
 		this.cameras.main.setRenderToTexture(this.customPipeline);
 
-		this.eggs = [];
-		this.eggs.push(new Egg(this, 4, 4));
-		this.eggs.push(new Egg(this, 20, 10));
+
+		this.time.addEvent({
+			delay: 1000,
+			callback: () => {
+				this.mom.playScript("intro");
+				this.player.playScript("intro");
+			}
+		});
 	}
 
 	update(time, delta) {

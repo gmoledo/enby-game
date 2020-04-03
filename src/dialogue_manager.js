@@ -3,7 +3,7 @@ class DialogueManager {
 		this.scene = scene;
 
 		this.dialogueBox = this.scene.add.sprite(	this.scene.cameras.main.width / 2, 
-													60,
+													80,
 													"dialogue_box");
 		this.dialogueBox.setVisible(false);
 
@@ -13,7 +13,8 @@ class DialogueManager {
 			wordWrap: {
 				width: this.dialogueBox.width - 40
 			},
-			fixedHeight: this.dialogueBox.height - 30
+			fixedHeight: this.dialogueBox.height - 30,
+			fontSize: "20px"
 		};
 		this.dialogueText = this.scene.add.text(this.scene.cameras.main.width / 2 - this.dialogueBox.width / 2 + 30, 
 												22,
@@ -37,16 +38,18 @@ class DialogueManager {
 			repeat: this.messageQueue[0].length - 1,
 			callback: this.addLetter,
 			callbackScope: this,
-			delay: 50
+			delay: 40
 		});
 	}
 
 	addLetter() {
-		let displayText = this.messageQueue[0].substring(0, this.dialogueText.text.length+1);
-		if (displayText == this.messageQueue[0]) {
-			this.queued = true;
+		if (this.messageQueue[0]) {
+			let displayText = this.messageQueue[0].substring(0, this.dialogueText.text.length+1);
+			if (displayText == this.messageQueue[0]) {
+				this.queued = true;
+			}
+			this.dialogueText.setText(displayText);
 		}
-		this.dialogueText.setText(displayText);
 	}
 
 	queueMessages(messages) {
@@ -93,7 +96,9 @@ class DialogueManager {
 		this.scene.time.addEvent({
 			delay: 100,
 			callback: () => {
-				this.scene.TestScene.state = "play";
+				if (this.scene.TestScene.state == "pause") {
+					this.scene.TestScene.state = "play";
+				}
 			}
 		});
 	}

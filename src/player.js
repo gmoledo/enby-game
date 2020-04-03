@@ -3,11 +3,11 @@ class Player {
 		this.scene = scene;
 		this.UIScene = this.scene.scene.get("UIScene");
 		// Grid position of player
-		this.tilePos = new Phaser.Math.Vector2(15, 5);
+		this.tilePos = new Phaser.Math.Vector2(21, 11);
 
 		// Instantiate Phaser game object representing player
-		this.go = this.scene.add.sprite(this.tilePos.x * this.scene.grid.currentMap.tileWidth + this.scene.grid.layer.x,
-										this.tilePos.y * this.scene.grid.currentMap.tileHeight,
+		this.go = this.scene.add.sprite(this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x,
+										this.tileToWorldPos(this.tilePos.x, this.tilePos.y).y,
 										"player");
 		this.go.setOrigin(0, 0.5);
 
@@ -20,7 +20,8 @@ class Player {
 		this.moveTween = this.scene.tweens.create({targets: this.go});
 		this.startPos = new Phaser.Math.Vector2(0, 0);
 		this.targetPos = new Phaser.Math.Vector2(0, 0);
-		
+
+		this.pauseScript = false;
 	}
 
 	update(dt) {
@@ -129,7 +130,7 @@ class Player {
 	tweenMovement() {
 		let difference = new Phaser.Math.Vector2(this.targetPos.x - this.startPos.x, this.targetPos.y - this.startPos.y);
 		
-		let stepX = this.go.x + difference.x * 10 * this.scene.game.loop.delta / 1000;
+		let stepX = this.go.x + difference.x * 5 * this.scene.game.loop.delta / 1000;
 		if (this.targetPos.x > this.startPos.x) {
 			this.go.x = Math.min(stepX, this.targetPos.x);
 		}
@@ -137,7 +138,7 @@ class Player {
 			this.go.x = Math.max(stepX, this.targetPos.x);
 		}
 
-		let stepY = this.go.y + difference.y * 10 * this.scene.game.loop.delta / 1000;
+		let stepY = this.go.y + difference.y * 5 * this.scene.game.loop.delta / 1000;
 		if (this.targetPos.y > this.startPos.y) {
 			this.go.y = Math.min(stepY, this.targetPos.y);
 		}
@@ -154,33 +155,55 @@ class Player {
 
 	playScript(script) {
 		if (script == "intro") {
-			let tweens = [
-				{
-					x: 15 * this.scene.grid.currentMap.tileWidth,
-					y: 10 * this.scene.grid.currentMap.tileHeight,
-					duration: 1000,
-				},
-				{
-					x: 11 * this.scene.grid.currentMap.tileWidth,
-					y: 10 * this.scene.grid.currentMap.tileHeight,
-					duration: 800
-				},
-				{
-					x: 19 * this.scene.grid.currentMap.tileWidth,
-					y: 10 * this.scene.grid.currentMap.tileHeight,
-					duration: 1600
-				}
-			];
-			this.scene.tweens.timeline({
-				tweens: tweens,
-				targets: this.go,
-				ease: "Linear",
-				onComplete: () => {
-					this.tilePos.x = 19;
-					this.tilePos.y = 10;
-					this.scene.state = "play";
+			this.go.x = this.tileToWorldPos(21, 11).x;
+			this.go.y = this.tileToWorldPos(21, 11).y;
+
+			this.scene.time.addEvent({
+				delay: 8000,
+				callback: () => {
+
+					this.UIScene.dialogueManager.queueMessages("Okay!");
+					this.scene.time.addEvent({
+						delay: 1000,
+						callback: () => {
+
+							this.UIScene.dialogueManager.dequeueMessage();
+							let tweens = [
+								{
+									x: this.tileToWorldPos(19, 11).x,
+									y: this.tileToWorldPos(19, 11).y,
+									duration: 500,
+								},
+							];
+							this.scene.tweens.timeline({
+								tweens: tweens,
+								targets: this.go,
+								ease: "Linear",
+								delay: 100, 
+								onComplete: () => {
+
+									this.UIScene.dialogueManager.queueMessages("Time to go! Use the arrow keys or WASD to move!");
+									this.scene.time.addEvent({
+										delay: 2500,
+										callback: () => {
+
+											this.UIScene.dialogueManager.dequeueMessage();
+											this.tilePos.x = 19;
+											this.tilePos.y = 11;
+											this.scene.state = "play";
+										}
+									})
+								}
+							});
+						}
+					});
 				}
 			});
 		}
+	}
+
+	tileToWorldPos(tileX, tileY) {
+		return {x: tileX * this.scene.grid.currentMap.tileWidth + this.scene.grid.currentLayer.x, 
+				y: tileY * this.scene.grid.currentMap.tileHeight + this.scene.grid.currentLayer.y}
 	}
 }
