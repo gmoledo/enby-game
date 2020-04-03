@@ -40,7 +40,7 @@ class InputManager {
 		this.controls.down.on("down", (key) => {
 			this.setUpDownInput("down", "down");
 		});
-		
+
 		this.controls.a.on("down", (key) => {
 			this.setLeftRightInput("down", "left");
 		});
@@ -53,7 +53,7 @@ class InputManager {
 		this.controls.s.on("down", (key) => {
 			this.setUpDownInput("down", "down");
 		});
-		
+
 		// Event handlers for when movement input keys are released
 		// Configured for arrow and WASD keys
 		this.controls.left.on("up", (key) => {
@@ -68,7 +68,7 @@ class InputManager {
 		this.controls.down.on("up", (key) => {
 			this.setUpDownInput("up", "down");
 		});
-		
+
 		this.controls.a.on("up", (key) => {
 			this.setLeftRightInput("up", "left");
 		});
@@ -81,6 +81,10 @@ class InputManager {
 		this.controls.s.on("up", (key) => {
 			this.setUpDownInput("up", "down");
 		});
+
+		this.controls.z.on("down", (key) => {
+			this.moveToMouse();
+		})
 	}
 
 	setLeftRightInput(event, direction) {
@@ -147,5 +151,16 @@ class InputManager {
 				}
 			}
 		}
+	}
+
+	moveToMouse(){
+		this.destTile = this.scene.grid.map.getTileAtWorldXY(this.pointer.x, this.pointer.y);
+		this.scene.grid.easystar.findPath(this.scene.grid.map.getTileAt(this.scene.player.tilePos.x, this.scene.player.tilePos.y).x, this.scene.grid.map.getTileAt(this.scene.player.tilePos.x, this.scene.player.tilePos.y).y, this.destTile.x, this.destTile.y, function( path ) {
+			if (path === null){
+				alert("Path was not found");
+			} else {
+				alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
+			}
+		});
 	}
 }

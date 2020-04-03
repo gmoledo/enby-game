@@ -18,8 +18,9 @@ class TestScene extends Phaser.Scene {
 
 	create() {
 		console.log(this.cameras.main);
+
 		// Class for handling input related logic
-		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d"]);
+		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d", "z"]);
 
 		// Class for handling physics related logic (might not be necessary)
 		this.physicsManager = new PhysicsManager(this);

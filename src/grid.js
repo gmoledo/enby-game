@@ -1,6 +1,9 @@
 class Grid {
+
 	constructor(scene) {
 		this.scene = scene;
+
+        this.easystar = new EasyStar.js();
 
 		// Tilemap setup
 		this.map = this.scene.make.tilemap({ key: "map" });
@@ -19,5 +22,8 @@ class Grid {
 				this.data[i][j] = new Phaser.Math.Vector2(i, j);
 			}
 		}
+
+		this.easystar.setGrid(this.data);
+		this.easystar.setAcceptableTiles([0,1,2,4]);
 	}
 }
