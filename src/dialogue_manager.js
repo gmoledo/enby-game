@@ -114,6 +114,9 @@ class DialogueManager {
 				if (this.scene.TestScene.state == "pause") {
 					this.scene.TestScene.state = "play";
 				}
+				if (this.scene.TestScene.state == "script") {
+					this.scene.TestScene.player.updateScript();
+				}
 			}
 		});
 	}

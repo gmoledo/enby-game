@@ -4,7 +4,7 @@ class Player {
 		this.UIScene = this.scene.scene.get("UIScene");
 
 		// Grid position of player
-		this.tilePos = new Phaser.Math.Vector2(21, 12);
+		this.tilePos = new Phaser.Math.Vector2(21, 11);
 
 		// Instantiate Phaser game object representing player
 		this.go = this.scene.add.sprite(this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x,
@@ -20,6 +20,11 @@ class Player {
 		// Tween for moving player
 		this.startPos = new Phaser.Math.Vector2(0, 0);
 		this.targetPos = new Phaser.Math.Vector2(0, 0);
+
+		this.pauseScript = false;
+		this.scriptActions = ["a", "b", "c", "d", "e"];
+		this.scriptActionIndex = 0;
+		this.scriptAction = "a";
 	}
 
 	update(dt) {
@@ -153,63 +158,56 @@ class Player {
 		this.scene.state = "pause";
 	}
 
+	updateScript() {
+		this.scriptAction = this.scriptActions[++this.scriptActionIndex];
+	}	
+
 	playScript(script) {
-		if (script == "intro") {
-
-			// Start at (21, 11)
-			this.go.x = this.tileToWorldPos(21, 11).x;
-			this.go.y = this.tileToWorldPos(21, 11).y;
-
-			this.scene.time.addEvent({
-				delay: 8000,
-				callback: () => {
-
-					// Say "Okay!"
-					this.UIScene.dialogueManager.queueMessages("Okay!");
-					this.scene.time.addEvent({
-						delay: 1000,
-						callback: () => {
-
-							// Move left 2 spaces
-							this.UIScene.dialogueManager.dequeueMessage();
-							let tweens = [
-								{
-									x: this.tileToWorldPos(19, 11).x,
-									y: this.tileToWorldPos(19, 11).y,
-									duration: 500
-								},
-							];
-							this.scene.tweens.timeline({
-								tweens: tweens,
-								targets: this.go,
-								ease: "Linear",
-								delay: 100, 
-								onComplete: () => {
-
-									// Say "Time to go! Use the arrow keys or WASD to move!"
-									this.UIScene.dialogueManager.queueMessages("Time to go! Use the arrow keys or WASD to move!");
-									this.scene.time.addEvent({
-										delay: 2500,
-										callback: () => {
-
-											this.UIScene.dialogueManager.dequeueMessage();
-											this.tilePos.x = 19;
-											this.tilePos.y = 11;
-											this.scene.state = "play";
-										}
-									})
-								}
-							});
-						}
-					});
-				}
-			});
+		if (script == "Intro") {
+			if (this.scriptAction == "a") {
+				// Start at (21, 11)
+				this.go.x = this.tileToWorldPos(21, 11).x;
+				this.go.y = this.tileToWorldPos(21, 11).y;
+				this.scene.time.addEvent({ delay: 1000, callback: () => {
+					this.scriptMessage("Okay!");
+				}});
+			}
+			if (this.scriptAction == "b") {
+				this.scene.time.addEvent({ delay: 1000, callback: () => {
+					this.scriptMove(-2, 0, 500, 0);
+				}});
+			}
+			if (this.scriptAction == "c") {
+				this.scriptMessage("Time to go! Use the arrow keys or WASD to move!");
+			}
+			if (this.scriptAction == "d") {
+				this.tilePos.x = 19;
+				this.tilePos.y = 11;
+				this.scene.state = "play";
+			}
 		}
+		this.scriptAction = "";
+	}
+
+	scriptMove(dx, dy, duration, delay) {
+		this.scene.tweens.add({
+			targets: this.go,
+			x: this.tileToWorldPos(this.tilePos.x + dx, this.tilePos.y + dy).x,
+			y: this.tileToWorldPos(this.tilePos.x + dx, this.tilePos.y + dy).y,
+			duration: duration,
+			delay: delay,
+			onComplete: () => {
+				this.updateScript();
+			}
+		});
+	}
+
+	scriptMessage(message) {
+		this.UIScene.dialogueManager.queueMessages(message);
 	}
 
 	// Converts tile position to world position
 	tileToWorldPos(tileX, tileY) {
-		console.log(this.scene.mapManager);
 		return {x: tileX * this.scene.mapManager.currentMap.tileWidth + this.scene.mapManager.currentLayer.x, 
 				y: tileY * this.scene.mapManager.currentMap.tileHeight + this.scene.mapManager.currentLayer.y}
 	}
