@@ -80,25 +80,26 @@ class Player {
 
 		// If you're not in between tiles...
 		if (!this.tweening) {
+			
+			// Set sprite frame depending on direction moving
+			if (moveX == 1) {
+				this.go.setFrame(3);
+			}
+			if (moveX == -1) {
+				this.go.setFrame(1);
+			}
+			if (moveY == 1) {
+				this.go.setFrame(0);
+			}
+			if (moveY == -1) {
+				this.go.setFrame(2);
+			}
+			
 			// ...check the destination tile for collision. If not...
 			let nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
 			if (nextTile && !nextTile.properties.Collision) {
 				// ...move.
 				this.move(moveX, moveY);
-			} 
-			// If there is a collision...
-			else {
-				// ...check if you can move vertically or horizontally alone.
-				// If you can, move.
-				nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x, this.tilePos.y + moveY);
-				if (nextTile && !nextTile.properties.Collision) {
-					this.move(0, moveY);
-				}
-
-				nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y);
-				if (nextTile && !nextTile.properties.Collision) {
-					this.move(moveX, 0);
-				}
 			}
 		}
 		else {
@@ -110,20 +111,6 @@ class Player {
 		// If there is no motion, just return.
 		if (dx == 0 && dy == 0) {
 			return;
-		}
-
-		// Set sprite frame depending on direction moving
-		if (dx == 1) {
-			this.go.setFrame(3);
-		}
-		if (dx == -1) {
-			this.go.setFrame(1);
-		}
-		if (dy == 1) {
-			this.go.setFrame(0);
-		}
-		if (dy == -1) {
-			this.go.setFrame(2);
 		}
 
 		// Update tile coordinates
