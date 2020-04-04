@@ -114,8 +114,18 @@ class DialogueManager {
 				if (this.scene.TestScene.state == "pause") {
 					this.scene.TestScene.state = "play";
 				}
+
+				// If the dialogue box is closed as part of the script, figure out who was
+				// speaking and update their script
 				if (this.scene.TestScene.state == "script") {
-					this.scene.TestScene.player.updateScript();
+					if (this.scene.TestScene.player.speaking) {
+						this.scene.TestScene.player.speaking = false;
+						this.scene.TestScene.player.updateScript();
+					}
+					if (this.scene.TestScene.mom.speaking) {
+						this.scene.TestScene.mom.speaking = false;
+						this.scene.TestScene.mom.updateScript();
+					}
 				}
 			}
 		});

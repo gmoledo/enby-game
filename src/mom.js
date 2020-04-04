@@ -3,69 +3,26 @@ class Mom extends Player {
 		super(scene);
 	}
 
+	// Handles scripting of the character's behavior
+	// Overrides Player Class
 	playScript(script) {
-		if (script == "intro") {
-			
-			// Start at (15, 17)
-			this.go.x = this.tileToWorldPos(15, 17).x;
-			this.go.y = this.tileToWorldPos(15, 17).y;
+		if (script == "Intro" && this.updateScriptAction) {
+			this.updateScriptAction = false;
 
-			this.scene.time.addEvent({
-				delay: 500,
-				callback: () => {
+			if (this.scriptAction == 0)
+			{
+				this.tilePos.x = 15;
+				this.tilePos.y = 17;
+				this.go.x = this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x;
+				this.go.y = this.tileToWorldPos(this.tilePos.x, this.tilePos.y).y;
 
-					// Move up 3 spaces
-					let tweens = [
-						{
-							x: this.tileToWorldPos(15, 14).x,
-							y: this.tileToWorldPos(15, 14).y,
-							duration: 1000
-						},
-					];
-					this.scene.tweens.timeline({
-						tweens: tweens,
-						targets: this.go,
-						ease: "Linear",
-						onComplete: () => {
-
-							//Say "Alex it's time to wake up!"
-							this.UIScene.dialogueManager.queueMessages("Alex, it's time to wake up!");
-							this.scene.time.addEvent({
-								delay: 2000,
-								callback: () => {
-									
-									// Move up 3 spaces
-									this.UIScene.dialogueManager.dequeueMessage();
-									tweens = [
-										{
-											x: this.tileToWorldPos(15, 11).x,
-											y: this.tileToWorldPos(15, 11).y,
-											duration: 1500
-										}
-									];
-									this.scene.tweens.timeline({
-										delay: 500,
-										tweens: tweens,
-										targets: this.go,
-										ease: "Linear",
-										onComplete: () => {
-
-											// Say "Come on, wake up!"
-											this.UIScene.dialogueManager.queueMessages("Come on, wake up!");
-											this.scene.time.addEvent({
-												delay: 2000,
-												callback: () => {
-													this.UIScene.dialogueManager.dequeueMessage();
-												}
-											})
-										}
-									})
-								}
-							})
-						}
-					});
-				}
-			})
+				this.scriptMove(15, 14, 500, 0);
+			}
+			if (this.scriptAction == 1) this.scriptMessage("Alex, it's time to wake up!", 0);
+			if (this.scriptAction == 2) this.scriptMove(15, 11, 500, 0);
+			if (this.scriptAction == 3) this.scriptMove(18, 11, 500, 0);
+			if (this.scriptAction == 4) this.scriptMessage("Come on, wake up!", 0); 
+			if (this.scriptAction == 5) this.scene.player.updateScript();
 		}
 	}
 }

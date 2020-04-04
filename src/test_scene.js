@@ -93,10 +93,14 @@ class TestScene extends Phaser.Scene {
 
 		// Optional intro sequence for demonstration purposes
 		this.state = "script";
+		this.mom.scriptAction = 0;
+		this.mom.updateScriptAction = true;
 	}
 
 	update(time, delta) {
 		let dt = delta / 1000;
+
+		this.inputManager.update(dt);
 
 		if (this.state == "play") {
 			this.player.update(dt);
@@ -106,7 +110,7 @@ class TestScene extends Phaser.Scene {
 
 		if (this.state == "script") {
 			this.player.playScript("Intro");
-			//this.mom.playScript("Intro");
+			this.mom.playScript("Intro");
 		}
 	}
 }

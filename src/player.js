@@ -4,7 +4,7 @@ class Player {
 		this.UIScene = this.scene.scene.get("UIScene");
 
 		// Grid position of player
-		this.tilePos = new Phaser.Math.Vector2(21, 11);
+		this.tilePos = new Phaser.Math.Vector2(25, 6);
 
 		// Instantiate Phaser game object representing player
 		this.go = this.scene.add.sprite(this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x,
@@ -20,11 +20,12 @@ class Player {
 		// Tween for moving player
 		this.startPos = new Phaser.Math.Vector2(0, 0);
 		this.targetPos = new Phaser.Math.Vector2(0, 0);
+		this.walkSpeed = 10;
 
-		this.pauseScript = false;
-		this.scriptActions = ["a", "b", "c", "d", "e"];
-		this.scriptActionIndex = 0;
-		this.scriptAction = "a";
+		this.updateScriptAction = false;
+		this.scriptAction = -1;
+
+		this.speaking = false;
 	}
 
 	update(dt) {
@@ -134,7 +135,7 @@ class Player {
 	tweenMovement() {
 		let difference = new Phaser.Math.Vector2(this.targetPos.x - this.startPos.x, this.targetPos.y - this.startPos.y);
 		
-		let stepX = this.go.x + difference.x * 5 * this.scene.game.loop.delta / 1000;
+		let stepX = this.go.x + difference.x * this.walkSpeed * this.scene.game.loop.delta / 1000;
 		if (this.targetPos.x > this.startPos.x) {
 			this.go.x = Math.min(stepX, this.targetPos.x);
 		}
@@ -142,7 +143,7 @@ class Player {
 			this.go.x = Math.max(stepX, this.targetPos.x);
 		}
 
-		let stepY = this.go.y + difference.y * 5 * this.scene.game.loop.delta / 1000;
+		let stepY = this.go.y + difference.y * this.walkSpeed * this.scene.game.loop.delta / 1000;
 		if (this.targetPos.y > this.startPos.y) {
 			this.go.y = Math.min(stepY, this.targetPos.y);
 		}
@@ -158,52 +159,60 @@ class Player {
 		this.scene.state = "pause";
 	}
 
+	// Go to the next scripted behavior
 	updateScript() {
-		this.scriptAction = this.scriptActions[++this.scriptActionIndex];
+		this.scriptAction++;
+		this.updateScriptAction = true;
 	}	
 
+	// Handles scripting of the character's behavior
 	playScript(script) {
-		if (script == "Intro") {
-			if (this.scriptAction == "a") {
-				// Start at (21, 11)
-				this.go.x = this.tileToWorldPos(21, 11).x;
-				this.go.y = this.tileToWorldPos(21, 11).y;
-				this.scene.time.addEvent({ delay: 1000, callback: () => {
-					this.scriptMessage("Okay!");
-				}});
-			}
-			if (this.scriptAction == "b") {
-				this.scene.time.addEvent({ delay: 1000, callback: () => {
-					this.scriptMove(-2, 0, 500, 0);
-				}});
-			}
-			if (this.scriptAction == "c") {
-				this.scriptMessage("Time to go! Use the arrow keys or WASD to move!");
-			}
-			if (this.scriptAction == "d") {
-				this.tilePos.x = 19;
-				this.tilePos.y = 11;
-				this.scene.state = "play";
-			}
+		if (script == "Intro" && this.updateScriptAction) {
+			if (this.scriptAction == 0) this.scriptMessage("Okay!", 0);
+			if (this.scriptAction == 1) this.scriptMove(23, 6, 500, 100);
+			if (this.scriptAction == 2) this.scriptMessage("Time to go! Use the arrow keys or WASD to move!");
+			if (this.scriptAction == 3) this.scene.state = "play";
 		}
-		this.scriptAction = "";
+		this.updateScriptAction = false;
 	}
 
-	scriptMove(dx, dy, duration, delay) {
+	// Handles how the character moves during scripted motion
+	scriptMove(tileX, tileY, duration, delay) {
 		this.scene.tweens.add({
 			targets: this.go,
-			x: this.tileToWorldPos(this.tilePos.x + dx, this.tilePos.y + dy).x,
-			y: this.tileToWorldPos(this.tilePos.x + dx, this.tilePos.y + dy).y,
+			x: this.tileToWorldPos(tileX, tileY).x,
+			y: this.tileToWorldPos(tileX, tileY).y,
 			duration: duration,
 			delay: delay,
 			onComplete: () => {
 				this.updateScript();
 			}
 		});
+
+		// Change character's sprite depending on direction of movement
+		if (tileX - this.tilePos.x < 0) {
+			this.go.setFrame(1);
+		}
+		if (tileX - this.tilePos.x > 0) {
+			this.go.setFrame(3);
+		}
+		if (tileY - this.tilePos.y < 0) {
+			this.go.setFrame(2);
+		}
+		if (tileY - this.tilePos.y > 0) {
+			this.go.setFrame(0);
+		}
+
+		this.tilePos.x = tileX;
+		this.tilePos.y = tileY;
 	}
 
-	scriptMessage(message) {
-		this.UIScene.dialogueManager.queueMessages(message);
+	// Handles how the characters speak during scripted dialogue
+	scriptMessage(message, delay) {
+		this.scene.time.addEvent({ delay: delay, callback: () => {
+			this.speaking = true;
+			this.UIScene.dialogueManager.queueMessages(message);
+		}});
 	}
 
 	// Converts tile position to world position

@@ -131,4 +131,12 @@ class InputManager {
 		}
 		return false;
 	}
+
+	update(dt) {
+		// Debug feature to identify tiles 
+		if (this.pointer.isDown) {
+			let tileClicked = this.scene.mapManager.currentMap.getTileAtWorldXY(this.pointer.worldX, this.pointer.worldY);
+			console.log(tileClicked.x, tileClicked.y);
+		}
+	}
 }
