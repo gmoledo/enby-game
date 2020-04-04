@@ -52,9 +52,9 @@ class Player {
 		 			return;
 		 		}
 
-		 		let tile = this.scene.grid.currentMap.getTileAt(this.tilePos.x, this.tilePos.y);
+		 		let tile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x, this.tilePos.y);
 				if (tile.properties.Map) {
-					this.scene.grid.changeMap(tile.properties);
+					this.scene.mapManager.changeMap(tile.properties);
 					if (tile.properties.Direction == "Left") {
 						moveX = -1;
 						moveY = 0;
@@ -78,7 +78,7 @@ class Player {
 		// If you're not in between tiles...
 		if (!this.tweening) {
 			// ...check the destination tile for collision. If not...
-			let nextTile = this.scene.grid.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
+			let nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
 			if (nextTile && !nextTile.properties.Collision) {
 				// ...move.
 				this.move(moveX, moveY);
@@ -87,12 +87,12 @@ class Player {
 			else {
 				// ...check if you can move vertically or horizontally alone.
 				// If you can, move.
-				nextTile = this.scene.grid.currentMap.getTileAt(this.tilePos.x, this.tilePos.y + moveY);
+				nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x, this.tilePos.y + moveY);
 				if (nextTile && !nextTile.properties.Collision) {
 					this.move(0, moveY);
 				}
 
-				nextTile = this.scene.grid.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y);
+				nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y);
 				if (nextTile && !nextTile.properties.Collision) {
 					this.move(moveX, 0);
 				}
@@ -132,8 +132,8 @@ class Player {
 
 		// Set tween to move between tile coordinates
 		this.startPos = new Phaser.Math.Vector2(this.go.x, this.go.y);
-		this.targetPos = new Phaser.Math.Vector2(	this.go.x + dx * this.scene.grid.currentMap.tileWidth,
-													this.go.y + dy * this.scene.grid.currentMap.tileHeight);
+		this.targetPos = new Phaser.Math.Vector2(	this.go.x + dx * this.scene.mapManager.currentMap.tileWidth,
+													this.go.y + dy * this.scene.mapManager.currentMap.tileHeight);
 		this.tweening = true;
 		this.tweenMovement();
 	}
@@ -214,7 +214,7 @@ class Player {
 	}
 
 	tileToWorldPos(tileX, tileY) {
-		return {x: tileX * this.scene.grid.currentMap.tileWidth + this.scene.grid.currentLayer.x, 
-				y: tileY * this.scene.grid.currentMap.tileHeight + this.scene.grid.currentLayer.y}
+		return {x: tileX * this.scene.mapManager.currentMap.tileWidth + this.scene.mapManager.currentLayer.x, 
+				y: tileY * this.scene.mapManager.currentMap.tileHeight + this.scene.mapManager.currentLayer.y}
 	}
 }

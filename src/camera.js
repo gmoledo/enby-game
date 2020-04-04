@@ -8,7 +8,8 @@ class Camera {
 		this.go.startFollow(this.scene.player.go, true);
 
 		// Clamp camera to world bounds
-		this.go.setBounds(this.scene.grid.currentLayer.x + 40, this.scene.grid.currentLayer.y, this.scene.grid.currentLayer.width - 80, this.scene.grid.currentLayer.height);
+		this.go.setBounds(	this.scene.mapManager.currentLayer.x + 40, this.scene.mapManager.currentLayer.y,
+							this.scene.mapManager.currentLayer.width - 80, this.scene.mapManager.currentLayer.height);
 	}
 
 	update(dt) {

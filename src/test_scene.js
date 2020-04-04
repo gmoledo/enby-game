@@ -73,7 +73,7 @@ class TestScene extends Phaser.Scene {
 		this.physicsManager = new PhysicsManager(this);
 
 		// Class for handling tilemap and grid-related structures and logic
-		this.grid = new Grid(this);
+		this.mapManager = new MapManager(this);
 
 		this.eggs = [];
 		this.eggs.push(new Egg(this, 4, 4));

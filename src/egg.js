@@ -2,8 +2,8 @@ class Egg {
 	constructor(scene, tileX, tileY) {
 		this.scene = scene;
 
-		this.go = this.scene.add.sprite(tileX * this.scene.grid.map.tileWidth + this.scene.grid.layer.x,
-										tileY * this.scene.grid.map.tileHeight,
+		this.go = this.scene.add.sprite(tileX * this.scene.mapManager.map.tileWidth + this.scene.mapManager.layer.x,
+										tileY * this.scene.mapManager.map.tileHeight,
 										"egg");
 		this.go.setOrigin(0, 0);
 		this.scene.physicsManager.addToGroup(this.go, "static");

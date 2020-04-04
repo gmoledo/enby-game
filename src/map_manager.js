@@ -1,4 +1,4 @@
-class Grid {
+class MapManager {
 	constructor(scene) {
 		this.scene = scene;
 
@@ -26,15 +26,15 @@ class Grid {
 
 
 		// Array of arrays representing grid
-		this.data = new Array(this.map.width);
-		for (let i = 0; i < this.data.length; i++) {
-			this.data[i] = new Array(this.map.height);
+		this.grid = new Array(this.map.width);
+		for (let i = 0; i < this.grid.length; i++) {
+			this.grid[i] = new Array(this.map.height);
 		}
 
 		// Populate grid with placeholder values
-		for (var i = 0; i < this.data.length; i++) {
-			for (var j = 0; j < this.data[i].length; j++) {
-				this.data[i][j] = new Phaser.Math.Vector2(i, j);
+		for (var i = 0; i < this.grid.length; i++) {
+			for (var j = 0; j < this.grid[i].length; j++) {
+				this.grid[i][j] = new Phaser.Math.Vector2(i, j);
 			}
 		}
 	}
