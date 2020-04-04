@@ -18,6 +18,15 @@ class InputManager {
 			}
 		});
 
+		this.controls.enter.on("down", (key) => {
+			if (this.scene.player.go.texture.key == "playerJacket") {
+				this.scene.player.go.setTexture("playerBase", this.scene.player.go.frame.name);
+			}
+			else {
+				this.scene.player.go.setTexture("playerJacket", this.scene.player.go.frame.name);
+			}
+		});
+
 		this.inputQueue = [];
 		this.input = "down";
 		this.setupInputMap();

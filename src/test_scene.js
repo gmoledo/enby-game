@@ -57,6 +57,7 @@ class TestScene extends Phaser.Scene {
 
 	preload() {
 		this.load.spritesheet("playerBase", "assets/player_base.png", { frameWidth: 40, frameHeight: 80 });
+		this.load.spritesheet("playerJacket", "assets/player_jacket.png", { frameWidth: 40, frameHeight: 80 });
 		this.load.image("egg", "assets/egg.png");
 
 		this.load.image("tiles", "Tileset.png");

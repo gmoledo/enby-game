@@ -117,16 +117,16 @@ class Player {
 		}
 
 		if (dx == 1) {
-			this.setFrame(3);
+			this.go.setFrame(3);
 		}
 		if (dx == -1) {
-			this.setFrame(1);
+			this.go.setFrame(1);
 		}
 		if (dy == 1) {
-			this.setFrame(0);
+			this.go.setFrame(0);
 		}
 		if (dy == -1) {
-			this.setFrame(2);
+			this.go.setFrame(2);
 		}
 
 		// Update tile coordinates
