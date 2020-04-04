@@ -9,6 +9,7 @@ class TestScene extends Phaser.Scene {
 	}
 
 	init() {
+		// Shader
 		this.BlackWhitePipeline = new Phaser.Class({
 			Extends: Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline,
 
@@ -56,12 +57,14 @@ class TestScene extends Phaser.Scene {
 	}
 
 	preload() {
+		// Sprite assets
 		this.load.spritesheet("playerBase", "assets/player_base.png", { frameWidth: 40, frameHeight: 80 });
 		this.load.spritesheet("playerJacket", "assets/player_jacket.png", { frameWidth: 40, frameHeight: 80 });
 		this.load.image("egg", "assets/egg.png");
 
+		// Tilemap-related assets
 		this.load.image("tiles", "Tileset.png");
-		this.load.tilemapTiledJSON("map", "Map.json");
+		this.load.tilemapTiledJSON("houseMap", "HouseMap.json");
 		this.load.tilemapTiledJSON("townMap", "TownMap.json");
 		this.load.tilemapTiledJSON("forestMap", "ForestMap.json");
 		this.load.tilemapTiledJSON("roomMap", "RoomMap.json")
@@ -75,6 +78,7 @@ class TestScene extends Phaser.Scene {
 		// Class for handling tilemap and grid-related structures and logic
 		this.mapManager = new MapManager(this);
 
+		// Container for egg objects
 		this.eggs = [];
 		this.eggs.push(new Egg(this, 4, 4));
 		this.eggs.push(new Egg(this, 20, 10));
@@ -82,15 +86,19 @@ class TestScene extends Phaser.Scene {
 		// Player Class
 		this.player = new Player(this);
 
+		// Mom Class, extends Player
 		this.mom = new Mom(this);
 
 		// Camera Class
 		this.camera = new Camera(this);
 
+		// Add shader and attach to cammera
 		this.customPipeline = game.renderer.addPipeline("BlackAndWhite", new this.BlackWhitePipeline(game));
 		this.cameras.main.setRenderToTexture(this.customPipeline);
 
 
+		// Optional intro sequence for demonstration purposes
+		// this.state = "script";
 		// this.time.addEvent({
 		// 	delay: 1000,
 		// 	callback: () => {

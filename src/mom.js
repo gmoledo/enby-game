@@ -5,6 +5,8 @@ class Mom extends Player {
 
 	playScript(script) {
 		if (script == "intro") {
+			
+			// Start at (15, 17)
 			this.go.x = this.tileToWorldPos(15, 17).x;
 			this.go.y = this.tileToWorldPos(15, 17).y;
 
@@ -12,6 +14,7 @@ class Mom extends Player {
 				delay: 500,
 				callback: () => {
 
+					// Move up 3 spaces
 					let tweens = [
 						{
 							x: this.tileToWorldPos(15, 14).x,
@@ -25,13 +28,13 @@ class Mom extends Player {
 						ease: "Linear",
 						onComplete: () => {
 
-							this.pauseScript = true;
+							//Say "Alex it's time to wake up!"
 							this.UIScene.dialogueManager.queueMessages("Alex, it's time to wake up!");
-
 							this.scene.time.addEvent({
 								delay: 2000,
 								callback: () => {
 									
+									// Move up 3 spaces
 									this.UIScene.dialogueManager.dequeueMessage();
 									tweens = [
 										{
@@ -46,8 +49,9 @@ class Mom extends Player {
 										targets: this.go,
 										ease: "Linear",
 										onComplete: () => {
-											this.UIScene.dialogueManager.queueMessages("Come on, wake up!");
 
+											// Say "Come on, wake up!"
+											this.UIScene.dialogueManager.queueMessages("Come on, wake up!");
 											this.scene.time.addEvent({
 												delay: 2000,
 												callback: () => {

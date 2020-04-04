@@ -26,15 +26,13 @@ class Player {
 		let moveX = 0;
 		let moveY = 0;
 
-		// Move left or right depending on input
+		// Set movement depending on input
 		if (this.scene.inputManager.input == "left") {
 			moveX = -1;
 		}
 		if (this.scene.inputManager.input == "right") {
 			moveX = 1;
 		}
-
-		// Move up or down depending on input
 		if (this.scene.inputManager.input == "up") {
 			moveY = -1;
 		}
@@ -42,19 +40,24 @@ class Player {
 			moveY = 1;
 		}
 
-
+		// If moving player reaches destination...
 		if (this.tweening) {
 			if (this.go.x == this.targetPos.x && this.go.y == this.targetPos.y) {
 				this.tweening = false;
 
+				// ...handle if player is touching an egg.
 		 		let eggGOs = this.scene.eggs.map((egg) => egg.go);
 		 		if (this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this)) {
-		 			return;
+		 			return; // Return if found so that player doesn't continue moving
 		 		}
 
+		 		// ...or handle if player is touching a tile with the Map property, which means...
 		 		let tile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x, this.tilePos.y);
 				if (tile.properties.Map) {
+					// ...that tile teleports player to a different map, so change map
 					this.scene.mapManager.changeMap(tile.properties);
+
+					// Set move variables depending on direction
 					if (tile.properties.Direction == "Left") {
 						moveX = -1;
 						moveY = 0;
@@ -97,10 +100,6 @@ class Player {
 					this.move(moveX, 0);
 				}
 			}
-
-			if (!nextTile) {
-				this.move(moveX, moveY);
-			}
 		}
 		else {
 			this.tweenMovement();
@@ -113,6 +112,7 @@ class Player {
 			return;
 		}
 
+		// Set sprite frame depending on direction moving
 		if (dx == 1) {
 			this.go.setFrame(3);
 		}
@@ -138,6 +138,7 @@ class Player {
 		this.tweenMovement();
 	}
 
+	// Move player from one tile to the next
 	tweenMovement() {
 		let difference = new Phaser.Math.Vector2(this.targetPos.x - this.startPos.x, this.targetPos.y - this.startPos.y);
 		
@@ -158,6 +159,7 @@ class Player {
 		}
 	}
 
+	// When landing on egg, destroy egg and queue next egg message, pausing scene
 	getEgg(player, egg) {
 		egg.destroy();
 		this.UIScene.dialogueManager.queueMessages(Egg.messages[Egg.messageIndex++]);
@@ -166,6 +168,8 @@ class Player {
 
 	playScript(script) {
 		if (script == "intro") {
+
+			// Start at (21, 11)
 			this.go.x = this.tileToWorldPos(21, 11).x;
 			this.go.y = this.tileToWorldPos(21, 11).y;
 
@@ -173,17 +177,19 @@ class Player {
 				delay: 8000,
 				callback: () => {
 
+					// Say "Okay!"
 					this.UIScene.dialogueManager.queueMessages("Okay!");
 					this.scene.time.addEvent({
 						delay: 1000,
 						callback: () => {
 
+							// Move left 2 spaces
 							this.UIScene.dialogueManager.dequeueMessage();
 							let tweens = [
 								{
 									x: this.tileToWorldPos(19, 11).x,
 									y: this.tileToWorldPos(19, 11).y,
-									duration: 500,
+									duration: 500
 								},
 							];
 							this.scene.tweens.timeline({
@@ -193,6 +199,7 @@ class Player {
 								delay: 100, 
 								onComplete: () => {
 
+									// Say "Time to go! Use the arrow keys or WASD to move!"
 									this.UIScene.dialogueManager.queueMessages("Time to go! Use the arrow keys or WASD to move!");
 									this.scene.time.addEvent({
 										delay: 2500,
@@ -213,7 +220,9 @@ class Player {
 		}
 	}
 
+	// Converts tile position to world position
 	tileToWorldPos(tileX, tileY) {
+		console.log(this.scene.mapManager);
 		return {x: tileX * this.scene.mapManager.currentMap.tileWidth + this.scene.mapManager.currentLayer.x, 
 				y: tileY * this.scene.mapManager.currentMap.tileHeight + this.scene.mapManager.currentLayer.y}
 	}

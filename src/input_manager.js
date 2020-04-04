@@ -1,13 +1,18 @@
 class InputManager {
 	constructor(scene, defaultControls) {
 		this.scene = scene;
+
+		// Initializes controls with cursor keys
 		this.controls = this.scene.input.keyboard.createCursorKeys();
 		this.pointer = this.scene.input.activePointer;
 
+		// Add each default control to inputManager
+		// See addInput() for more details
 		defaultControls.forEach((control) => {
 			this.addInput(control);
 		});
 
+		// When f key is released, toggle fullscreen
 		this.controls.f.on("up", (key) => {
 			if (this.scene.scale.isFullscreen) {
 				this.scene.scale.stopFullscreen();
@@ -18,6 +23,7 @@ class InputManager {
 			}
 		});
 
+		// When enter key is pressed, toggle player textures
 		this.controls.enter.on("down", (key) => {
 			if (this.scene.player.go.texture.key == "playerJacket") {
 				this.scene.player.go.setTexture("playerBase", this.scene.player.go.frame.name);
@@ -27,12 +33,15 @@ class InputManager {
 			}
 		});
 
+		// When q key is pressed, toggle shader
 		this.controls.q.on("down", (key) => {
 			this.scene.camera.go.renderToTexture = !this.scene.camera.go.renderToTexture;
 		});
 
-		this.inputQueue = [];
+		// Member variables
+		this.inputQueue = []; // Note: Not actually a queue data structure
 		this.input = "none";
+
 		this.setupInputMap();
 	}
 
@@ -99,25 +108,27 @@ class InputManager {
 	}
 
 	setInput(event, direction) {
-
+		// Adds input to queue
 		if (event == "down") {
 			this.inputQueue.push(direction);
 		}
 		
+		// Removes input from queue
 		if (event == "up") {
-			console.log(this.inputQueue.indexOf(direction));
 			this.inputQueue.splice(this.inputQueue.indexOf(direction), 1);
 		}
 
+		// Sets input to the last input in queue
 		this.input = this.inputQueue[this.inputQueue.length - 1];
-		console.log(this.inputQueue, this.input);
 	}
 
+	// Returns true if any keys used for controls are down, false if none
 	anyKeyDown() {
 		for (let control in this.controls) {
 			if (this.controls[control].isDown) {
 				return true;
 			}
 		}
+		return false;
 	}
 }

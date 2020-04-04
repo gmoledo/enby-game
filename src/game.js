@@ -1,3 +1,4 @@
+// Makes rendering crisp and removes subpixel rendering
 var renderConfig = {
 	antialias: false,
 	roundPixels: true

@@ -7,10 +7,14 @@ class UIScene extends Phaser.Scene {
 		this.load.image("dialogue_box", "assets/dialogue_box.png");
 	}
 
-	create() {	
+	create() {
+		// Reference to main scene
 		this.TestScene = this.scene.get("TestScene");
 
+		// Reference to input manager
 		this.inputManager = this.TestScene.inputManager;
+
+		// Dialogue Manager class
 		this.dialogueManager = new DialogueManager(this);
 	}
 
