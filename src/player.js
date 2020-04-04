@@ -4,7 +4,7 @@ class Player {
 		this.UIScene = this.scene.scene.get("UIScene");
 
 		// Grid position of player
-		this.tilePos = new Phaser.Math.Vector2(21, 11);
+		this.tilePos = new Phaser.Math.Vector2(21, 12);
 
 		// Instantiate Phaser game object representing player
 		this.go = this.scene.add.sprite(this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x,
@@ -18,11 +18,8 @@ class Player {
 		this.go.body.setOffset(this.go.width * 1/6, this.go.height / 2 + this.go.height / 2 * 1/6);
 
 		// Tween for moving player
-		this.moveTween = this.scene.tweens.create({targets: this.go});
 		this.startPos = new Phaser.Math.Vector2(0, 0);
 		this.targetPos = new Phaser.Math.Vector2(0, 0);
-
-		this.pauseScript = false;
 	}
 
 	update(dt) {

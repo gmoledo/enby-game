@@ -27,8 +27,12 @@ class InputManager {
 			}
 		});
 
+		this.controls.q.on("down", (key) => {
+			this.scene.camera.go.renderToTexture = !this.scene.camera.go.renderToTexture;
+		});
+
 		this.inputQueue = [];
-		this.input = "down";
+		this.input = "none";
 		this.setupInputMap();
 	}
 

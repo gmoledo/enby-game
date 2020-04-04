@@ -31,7 +31,7 @@ class TestScene extends Phaser.Scene {
 							vec4 pixel = texture2D(uMainSampler, outTexCoord);
 						    
 						    vec4 white = vec4(0.8, 0.8, 0.8, 1.0);
-						    vec4 black = vec4(0.0, 0.0, 0, 1.0);
+						    vec4 black = vec4(0.05, 0.05, 0.05, 1.0);
 						    
 							float average = (pixel.r + pixel.g + pixel.b) / 3.0;
 						    
@@ -52,7 +52,7 @@ class TestScene extends Phaser.Scene {
 		});
 
 		// Class for handling input related logic
-		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d", "enter", "f"]);
+		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d", "enter", "f", "q"]);
 	}
 
 	preload() {
