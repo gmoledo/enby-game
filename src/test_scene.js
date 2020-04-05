@@ -53,6 +53,8 @@ class TestScene extends Phaser.Scene {
 				});
 			}
 		});
+		this.customPipeline = this.game.renderer.addPipeline("BlackAndWhite", new this.BlackWhitePipeline(this.game));
+		
 
 		// Class for handling input related logic
 		this.inputManager = new InputManager(this, ["esc", "w", "a", "s", "d", "enter", "f", "q"]);
@@ -95,7 +97,6 @@ class TestScene extends Phaser.Scene {
 		// Camera Class
 		this.camera = new Camera(this);
 
-		this.customPipeline = this.game.renderer.addPipeline("BlackAndWhite", new this.BlackWhitePipeline(this.game));
 		this.cameras.main.setRenderToTexture(this.customPipeline);
 
 

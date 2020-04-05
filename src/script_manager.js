@@ -21,13 +21,13 @@ class ScriptManager {
 			this.scene.UIScene.black.setVisible(true);
 
 			mom.scriptMessage(0, "Knock, knock! Time to wake up sweetie!");
-			if (this.scriptAction == 1) mom.UIScene.fadeBlack().setCallback("onComplete", () => this.updateScript(), [], this);
+			if (this.scriptAction == 1) this.scene.UIScene.fadeBlack().setCallback("onComplete", () => this.updateScript(), [], this);
 			if (this.scriptAction == 2) 
 			{
 				mom.goto(15, 17);
 				mom.go.setFrame(2);
 
-				mom.scriptMessage(2, "Come on, up and at 'em.", 1000)
+				mom.scriptMove(2, 15, 15, 350, 500).setCallback("onComplete", () => mom.scriptMessage(2, "Come on, up and at 'em.", 100), [], this);
 			}
 			player.scriptMessage(3, "*Yawns* Hmm?", 100);
 			if (this.scriptAction == 4) mom.scriptMove(4, 15, 11, 1000, 0).setCallback("onComplete", () => mom.scriptMove(4, 18, 11, 500, 0), [], this);
