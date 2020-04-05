@@ -11,12 +11,19 @@ class DialogueManager {
 
 
 		// Initialize Dialogue Box Text game object
-		this.dialogueText = this.scene.add.bitmapText(this.scene.cameras.main.width / 2 - this.dialogueBox.width / 2 + 180, 
-												22,
-												"font",
-												"",
-												32);
-		this.dialogueText.setMaxWidth(this.dialogueBox.width - 210);
+		this.dynamicText = this.scene.add.dynamicBitmapText(this.scene.cameras.main.width / 2 - this.dialogueBox.width / 2 + 180, 
+															22, "font", "", 32);
+		this.dynamicText.setDisplayCallback((display) => {
+			display.y += Math.sin(this.rhymeWave + display.index) * 5;
+			return display;
+		});
+
+		this.staticText = this.scene.add.dynamicBitmapText(	this.scene.cameras.main.width / 2 - this.dialogueBox.width / 2 + 180, 
+															22, "font", "", 32);
+		this.staticText.setMaxWidth(this.dialogueBox.width - 210, 32);
+
+		this.dialogueText = this.staticText;
+
 
 		this.playerPortrait = this.scene.add.sprite(this.dialogueBox.x - this.dialogueBox.width / 2 + 95, this.dialogueBox.y, "playerPortrait");
 		this.playerPortrait.setVisible(false);
@@ -28,6 +35,8 @@ class DialogueManager {
 		this.messageQueue = [];
 		this.messageCompleted = false;
 		this.letterRevealEvent = null;
+
+		this.rhymeWave = 0;
 	}
 
 	// Pushes the given message or messages into the message queue,
@@ -141,5 +150,7 @@ class DialogueManager {
 				this.dequeueMessage();
 			}
 		}
+
+		this.rhymeWave = (this.rhymeWave + Math.PI / 30) % (Math.PI * 2);
 	}
 }

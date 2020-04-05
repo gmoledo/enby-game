@@ -14,20 +14,17 @@ class ScriptManager {
 
 	update() {
 		if (this.script == "Intro" && this.updateScriptAction) {
-			this.updateScriptAction = false;
 
 			let mom = this.scene.mom;
 			let player = this.scene.player;
 
-			console.log(this.scriptAction);
+			this.scene.UIScene.black.setVisible(true);
+
 			mom.scriptMessage(0, "Knock, knock! Time to wake up sweetie!");
 			if (this.scriptAction == 1) mom.UIScene.fadeBlack().setCallback("onComplete", () => this.updateScript(), [], this);
 			if (this.scriptAction == 2) 
 			{
-				mom.tilePos.x = 15;
-				mom.tilePos.y = 17;
-				mom.go.x = mom.tileToWorldPos(mom.tilePos.x, mom.tilePos.y).x;
-				mom.go.y = mom.tileToWorldPos(mom.tilePos.x, mom.tilePos.y).y;
+				mom.goto(15, 17);
 				mom.go.setFrame(2);
 
 				mom.scriptMessage(2, "Come on, up and at 'em.", 1000)
@@ -48,7 +45,58 @@ class ScriptManager {
 			}
 			player.scriptMove(10, 23, 5, 1000, 500);
 
-			if (this.scriptAction == 11) this.scene.state = "play";
-		}	
+			if (this.scriptAction == 11) {
+				this.scene.state = "play";
+				this.scriptAction = -1;
+			}
+		}
+
+		if (this.script == "Rhyme" && this.updateScriptAction) {
+
+			let mom = this.scene.mom;
+			let player = this.scene.player;
+
+			if (this.scriptAction == 0) {
+				this.scene.mapManager.changeMap({Map: "House"});
+
+				player.exitHouseFlag = true;
+				player.goto(16, 4);
+
+				player.scriptMove(0, 16, 9, 500, 0);
+			}
+
+			if (this.scriptAction == 1) {
+				player.go.setFrame(2);
+				mom.goto(16, 4);
+				mom.go.setVisible(true);
+				mom.scriptMove(1, 16, 5, 150, 0);
+			}
+			mom.scriptMessage(2, ["And remember the rhyme sweetie!", "What's the rhyme?"]);
+
+			if (this.scriptAction == 3) {
+				this.scene.UIScene.dialogueManager.dialogueText = this.scene.UIScene.dialogueManager.dynamicText;
+				player.scriptMessage(3, "From the woods we stay away,\nTo keep the creatures in at bay,\n" +
+						 				"They rip and tear and bite and slay,\nUntil they reap the light of day.");
+			}
+
+			if (this.scriptAction == 4) {
+				this.scene.UIScene.dialogueManager.dialogueText = this.scene.UIScene.dialogueManager.staticText;
+				mom.scriptMessage(4, "That's right, honey. See you soon!");
+			}
+			if (this.scriptAction == 5) {
+				mom.scriptMove(5, 16, 4, 150, 0).setCallback("onComplete", () => {
+					mom.go.setVisible(false);
+					this.updateScript();
+				}, [], this);
+			}
+			if (this.scriptAction == 6) {
+				player.go.setFrame(0);
+				this.scene.state = "play";
+				this.scriptAction = -1;
+			}
+
+		}
+		
+		this.updateScriptAction = false;
 	}
 }

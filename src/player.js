@@ -23,12 +23,14 @@ class Player {
 		this.walkSpeed = 10;
 
 		this.name = "Player";
+
+		this.exitHouseFlag = false;
 	}
 
 	update(dt) {
 		let moveX = 0;
 		let moveY = 0;
-
+		
 		// Set movement depending on input
 		if (this.scene.inputManager.input == "left") {
 			moveX = -1;
@@ -59,6 +61,13 @@ class Player {
 				if (tile.properties.Map) {
 					// ...that tile teleports player to a different map, so change map
 					this.scene.mapManager.changeMap(tile.properties);
+
+					if (this.scene.mapManager.currentMap == this.scene.mapManager.houseMap && !this.exitHouseFlag) {
+						this.scene.state = "script";
+						this.scene.scriptManager.script = "Rhyme";
+						this.scene.scriptManager.updateScript();
+						return;
+					}
 
 					// Set move variables depending on direction
 					if (tile.properties.Direction == "Left") {
@@ -201,6 +210,13 @@ class Player {
 			this.speaking = true;
 			this.UIScene.dialogueManager.queueMessages(this.name, message);
 		}});
+	}
+
+	goto(tileX, tileY) {
+		this.tilePos.x = tileX;
+		this.tilePos.y = tileY;
+		this.go.x = this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x;
+		this.go.y = this.tileToWorldPos(this.tilePos.x, this.tilePos.y).y;
 	}
 
 	// Converts tile position to world position

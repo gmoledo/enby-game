@@ -12,7 +12,7 @@ class UIScene extends Phaser.Scene {
 	preload() {
 		this.load.image("dialogue_box", "assets/dialogue_box.png");
 		this.load.bitmapFont("font", "assets/font.png", "assets/font.fnt");
-		
+
 		this.load.image("playerPortrait", "assets/player_portrait.png");
 
 		this.load.image("black", "assets/black.png");
@@ -26,6 +26,7 @@ class UIScene extends Phaser.Scene {
 		this.inputManager = this.TestScene.inputManager;
 
 		this.black = this.add.sprite(0, 0, "black");
+		this.black.setVisible(false);
 		this.black.setOrigin(0, 0);
 		this.black.setScale(10);
 
