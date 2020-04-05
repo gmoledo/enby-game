@@ -31,7 +31,7 @@ class ScriptManager {
 			}
 			player.scriptMessage(3, "*Yawns* Hmm?", 100);
 			if (this.scriptAction == 4) mom.scriptMove(4, 15, 11, 1000, 0).setCallback("onComplete", () => mom.scriptMove(4, 18, 11, 500, 0), [], this);
-			mom.scriptMessage(5, "C'mon babe. I need you to go into town and get some eggs for me.");
+			mom.scriptMessage(5, "C'mon honey. I need you to go into town and get some eggs for me.");
 			if (this.scriptAction == 6) {
 				player.go.setFrame(1);
 

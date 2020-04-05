@@ -63,11 +63,11 @@ class TestScene extends Phaser.Scene {
 		this.load.spritesheet("playerJacket", "assets/player_jacket.png", { frameWidth: 40, frameHeight: 80 });
 		this.load.image("egg", "assets/egg.png");
 
-		this.load.image("tiles", "Tileset.png");
-		this.load.tilemapTiledJSON("houseMap", "HouseMap.json");
-		this.load.tilemapTiledJSON("townMap", "TownMap.json");
-		this.load.tilemapTiledJSON("forestMap", "ForestMap.json");
-		this.load.tilemapTiledJSON("roomMap", "RoomMap.json")
+		this.load.image("tiles", "Tiled_data/Tileset.png");
+		this.load.tilemapTiledJSON("houseMap", "Tiled_data/HouseMap.json");
+		this.load.tilemapTiledJSON("townMap", "Tiled_data/TownMap.json");
+		this.load.tilemapTiledJSON("forestMap", "Tiled_data/ForestMap.json");
+		this.load.tilemapTiledJSON("roomMap", "Tiled_data/RoomMap.json")
 
 	}
 
