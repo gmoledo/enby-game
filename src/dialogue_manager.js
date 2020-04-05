@@ -18,8 +18,8 @@ class DialogueManager {
 			return display;
 		});
 
-		this.staticText = this.scene.add.dynamicBitmapText(	this.scene.cameras.main.width / 2 - this.dialogueBox.width / 2 + 180, 
-															22, "font", "", 32);
+		this.staticText = this.scene.add.bitmapText(this.scene.cameras.main.width / 2 - this.dialogueBox.width / 2 + 180, 
+													22, "font", "", 32);
 		this.staticText.setMaxWidth(this.dialogueBox.width - 210, 32);
 
 		this.dialogueText = this.staticText;
