@@ -4,7 +4,7 @@ class Player {
 		this.UIScene = this.scene.scene.get("UIScene");
 
 		// Grid position of player
-		this.tilePos = new Phaser.Math.Vector2(25, 6);
+		this.tilePos = new Phaser.Math.Vector2(25, 5);
 
 		// Instantiate Phaser game object representing player
 		this.go = this.scene.add.sprite(this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x,
@@ -152,7 +152,7 @@ class Player {
 	// When landing on egg, destroy egg and queue next egg message, pausing scene
 	getEgg(player, egg) {
 		egg.destroy();
-		this.UIScene.dialogueManager.queueMessages(Egg.messages[Egg.messageIndex++]);
+		this.UIScene.dialogueManager.queueMessages(this.name, Egg.messages[Egg.messageIndex++]);
 		this.scene.state = "pause";
 	}
 

@@ -46,7 +46,7 @@ class ScriptManager {
 			if (this.scriptAction == 10) {
 				mom.go.setVisible(false);
 			}
-			player.scriptMove(10, 23, 6, 1000, 500);
+			player.scriptMove(10, 23, 5, 1000, 500);
 
 			if (this.scriptAction == 11) this.scene.state = "play";
 		}	
