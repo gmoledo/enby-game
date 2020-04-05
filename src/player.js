@@ -22,10 +22,7 @@ class Player {
 		this.targetPos = new Phaser.Math.Vector2(0, 0);
 		this.walkSpeed = 10;
 
-		this.updateScriptAction = false;
-		this.scriptAction = -1;
-
-		this.speaking = false;
+		this.name = "Player";
 	}
 
 	update(dt) {
@@ -159,35 +156,11 @@ class Player {
 		this.scene.state = "pause";
 	}
 
-	// Go to the next scripted behavior
-	updateScript() {
-		this.scriptAction++;
-		this.updateScriptAction = true;
-	}	
-
-	// Handles scripting of the character's behavior
-	playScript(script) {
-		if (script == "Intro" && this.updateScriptAction) {
-			if (this.scriptAction == 0) this.scriptMessage("Okay!", 0);
-			if (this.scriptAction == 1) this.scriptMove(23, 6, 500, 100);
-			if (this.scriptAction == 2) this.scriptMessage("Time to go! Use the arrow keys or WASD to move!");
-			if (this.scriptAction == 3) this.scene.state = "play";
-		}
-		this.updateScriptAction = false;
-	}
-
 	// Handles how the character moves during scripted motion
-	scriptMove(tileX, tileY, duration, delay) {
-		this.scene.tweens.add({
-			targets: this.go,
-			x: this.tileToWorldPos(tileX, tileY).x,
-			y: this.tileToWorldPos(tileX, tileY).y,
-			duration: duration,
-			delay: delay,
-			onComplete: () => {
-				this.updateScript();
-			}
-		});
+	scriptMove(scriptAction, tileX, tileY, duration, delay) {
+		if (scriptAction != this.scene.scriptManager.scriptAction) {
+			return;
+		}
 
 		// Change character's sprite depending on direction of movement
 		if (tileX - this.tilePos.x < 0) {
@@ -205,13 +178,28 @@ class Player {
 
 		this.tilePos.x = tileX;
 		this.tilePos.y = tileY;
+
+		return this.scene.tweens.add({
+			targets: this.go,
+			x: this.tileToWorldPos(tileX, tileY).x,
+			y: this.tileToWorldPos(tileX, tileY).y,
+			duration: duration,
+			delay: delay,
+			onComplete: () => {
+				this.scene.scriptManager.updateScript();
+			}
+		});
 	}
 
 	// Handles how the characters speak during scripted dialogue
-	scriptMessage(message, delay) {
+	scriptMessage(scriptAction, message, delay) {
+		if (scriptAction != this.scene.scriptManager.scriptAction) {
+			return;
+		}
+
 		this.scene.time.addEvent({ delay: delay, callback: () => {
 			this.speaking = true;
-			this.UIScene.dialogueManager.queueMessages(message);
+			this.UIScene.dialogueManager.queueMessages(this.name, message);
 		}});
 	}
 

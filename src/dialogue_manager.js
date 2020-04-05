@@ -11,20 +11,18 @@ class DialogueManager {
 
 
 		// Initialize Dialogue Box Text game object
-		let dialogueTextConfig = {
-			color: "#ffffff",
-			wordWrap: {
-				width: this.dialogueBox.width - 40
-			},
-			fixedHeight: this.dialogueBox.height - 30,
-			fontSize: "20px"
-		};
-		this.dialogueText = this.scene.add.text(this.scene.cameras.main.width / 2 - this.dialogueBox.width / 2 + 30, 
+		this.dialogueText = this.scene.add.bitmapText(this.scene.cameras.main.width / 2 - this.dialogueBox.width / 2 + 180, 
 												22,
+												"font",
 												"",
-												dialogueTextConfig);
-		this.dialogueText.setLineSpacing(4);
+												32);
+		this.dialogueText.setMaxWidth(this.dialogueBox.width - 210);
 
+		this.playerPortrait = this.scene.add.sprite(this.dialogueBox.x - this.dialogueBox.width / 2 + 95, this.dialogueBox.y, "playerPortrait");
+		this.playerPortrait.setVisible(false);
+		this.playerPortrait.setPipeline("BlackAndWhite");
+
+		this.activePortrait = null;
 
 		// Member variables
 		this.messageQueue = [];
@@ -34,7 +32,7 @@ class DialogueManager {
 
 	// Pushes the given message or messages into the message queue,
 	// then shows the next message
-	queueMessages(messages) {
+	queueMessages(character, messages) {
 		if (typeof messages === "string") {
 			messages = [messages];
 		}
@@ -44,7 +42,7 @@ class DialogueManager {
 		});
 
 		if (this.messageQueue.length > 0) {
-			this.showMessage();
+			this.showMessage(character);
 		}
 	}
 
@@ -77,9 +75,13 @@ class DialogueManager {
 	}
 
 	// Makes dialogue box visible and starts letter reveal event
-	showMessage() {
+	showMessage(character) {
 		if (!this.dialogueBox.visible) {
 			this.dialogueBox.setVisible(true);
+			if (character == "Player") {
+				this.playerPortrait.setVisible(true);
+				this.activePortrait = this.playerPortrait;
+			}
 		}
 
 		this.letterRevealEvent = this.scene.time.addEvent({
@@ -107,6 +109,7 @@ class DialogueManager {
 	closeDialogueBox() {
 		this.dialogueBox.setVisible(false);
 		this.dialogueText.text = "";
+		if (this.activePortrait) this.activePortrait.setVisible(false);
 
 		this.scene.time.addEvent({
 			delay: 100,
@@ -118,14 +121,7 @@ class DialogueManager {
 				// If the dialogue box is closed as part of the script, figure out who was
 				// speaking and update their script
 				if (this.scene.TestScene.state == "script") {
-					if (this.scene.TestScene.player.speaking) {
-						this.scene.TestScene.player.speaking = false;
-						this.scene.TestScene.player.updateScript();
-					}
-					if (this.scene.TestScene.mom.speaking) {
-						this.scene.TestScene.mom.speaking = false;
-						this.scene.TestScene.mom.updateScript();
-					}
+					this.scene.TestScene.scriptManager.updateScript();
 				}
 			}
 		});

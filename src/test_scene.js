@@ -6,6 +6,9 @@ class TestScene extends Phaser.Scene {
 		this.states = ["play", "pause", "script"];
 		this.stateIndex = 2;
 		this.state = this.states[this.stateIndex];
+
+		this.sceneLoaded = false;
+		this.gameStarted = false;
 	}
 
 	init() {
@@ -30,17 +33,17 @@ class TestScene extends Phaser.Scene {
 						{
 							vec4 pixel = texture2D(uMainSampler, outTexCoord);
 						    
-						    vec4 white = vec4(0.8, 0.8, 0.8, 1.0);
-						    vec4 black = vec4(0.05, 0.05, 0.05, 1.0);
+						    vec3 white = vec3(0.9, 0.9, 0.9);
+						    vec3 black = vec3(0.05, 0.05, 0.05);
 						    
 							float average = (pixel.r + pixel.g + pixel.b) / 3.0;
 						    
 						    if (average >= 0.1)
 						    {
-						        pixel = black;
+						        pixel = vec4(black, pixel.a);
 						    }
 						    else {
-						        pixel = white;
+						        pixel = vec4(white, pixel.a);
 						    }
 
 
@@ -69,11 +72,16 @@ class TestScene extends Phaser.Scene {
 	}
 
 	create() {
+		// UI Scene
+		this.UIScene = this.scene.get("UIScene");
+		
 		// Class for handling physics related logic (might not be necessary)
 		this.physicsManager = new PhysicsManager(this);
 
 		// Class for handling tilemap and grid-related structures and logic
 		this.mapManager = new MapManager(this);
+
+		this.scriptManager = new ScriptManager(this);
 
 		this.eggs = [];
 		this.eggs.push(new Egg(this, 4, 4));
@@ -87,30 +95,38 @@ class TestScene extends Phaser.Scene {
 		// Camera Class
 		this.camera = new Camera(this);
 
-		this.customPipeline = game.renderer.addPipeline("BlackAndWhite", new this.BlackWhitePipeline(game));
+		this.customPipeline = this.game.renderer.addPipeline("BlackAndWhite", new this.BlackWhitePipeline(this.game));
 		this.cameras.main.setRenderToTexture(this.customPipeline);
 
 
 		// Optional intro sequence for demonstration purposes
 		this.state = "script";
-		this.mom.scriptAction = 0;
-		this.mom.updateScriptAction = true;
+		this.sceneLoaded = true;
 	}
 
 	update(time, delta) {
+		if (!this.gameStarted && this.sceneLoaded && this.UIScene.sceneLoaded) {
+			this.startGame();
+			this.gameStarted = true;
+		}
+
 		let dt = delta / 1000;
 
 		this.inputManager.update(dt);
 
 		if (this.state == "play") {
 			this.player.update(dt);
-
-			this.camera.update(dt);
 		}
 
 		if (this.state == "script") {
-			this.player.playScript("Intro");
-			this.mom.playScript("Intro");
+			this.scriptManager.update();
 		}
+
+		this.camera.update(dt);
+	}
+
+	startGame() {
+		this.scriptManager.script = "Intro";
+		this.scriptManager.updateScript();
 	}
 }

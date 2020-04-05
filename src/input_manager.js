@@ -108,6 +108,8 @@ class InputManager {
 	}
 
 	setInput(event, direction) {
+		// TODO: Fix bug when a button is held and two buttons are pressed at same time
+		
 		// Adds input to queue
 		if (event == "down") {
 			this.inputQueue.push(direction);
@@ -136,7 +138,9 @@ class InputManager {
 		// Debug feature to identify tiles 
 		if (this.pointer.isDown) {
 			let tileClicked = this.scene.mapManager.currentMap.getTileAtWorldXY(this.pointer.worldX, this.pointer.worldY);
-			console.log(tileClicked.x, tileClicked.y);
+			if (tileClicked) {
+				console.log(tileClicked.x, tileClicked.y);
+			}
 		}
 	}
 }
