@@ -86,8 +86,13 @@ class TestScene extends Phaser.Scene {
 		this.scriptManager = new ScriptManager(this);
 
 		this.eggs = [];
-		this.eggs.push(new Egg(this, 4, 4));
-		this.eggs.push(new Egg(this, 20, 10));
+		this.eggs.push(new Egg(this, 26, 15));
+		this.eggs.push(new Egg(this, 18, 12));
+		this.eggs.push(new Egg(this, 7, 15));
+		this.eggs.push(new Egg(this, 13, 14));
+		this.eggs.push(new Egg(this, 11, 5));
+		this.eggs.push(new Egg(this, 5, 4));
+
 		
 		// Player Class
 		this.player = new Player(this);
@@ -122,8 +127,6 @@ class TestScene extends Phaser.Scene {
 		if (this.state == "script") {
 			this.scriptManager.update();
 		}
-
-		this.camera.update(dt);
 	}
 
 	startGame() {

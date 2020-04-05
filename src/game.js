@@ -7,7 +7,7 @@ var renderConfig = {
 var config = {
 	type: Phaser.AUTO,
 	scale: {
-		width: 1280,
+		width: 1000,
 		height: 720,
 		autoCenter: Phaser.Scale.Center.CENTER_BOTH
 	},

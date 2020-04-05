@@ -20,7 +20,7 @@ class Player {
 		// Tween for moving player
 		this.startPos = new Phaser.Math.Vector2(0, 0);
 		this.targetPos = new Phaser.Math.Vector2(0, 0);
-		this.walkSpeed = 10;
+		this.walkSpeed = 5;
 
 		this.name = "Player";
 
@@ -51,10 +51,12 @@ class Player {
 				this.tweening = false;
 
 				// ...handle if player is touching an egg.
-		 		let eggGOs = this.scene.eggs.map((egg) => egg.go);
-		 		if (this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this)) {
-		 			return; // Return if found so that player doesn't continue moving
-		 		}
+				if (this.scene.eggs) {
+			 		let eggGOs = this.scene.eggs.map((egg) => egg.go);
+			 		if (this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this)) {
+			 			return; // Return if found so that player doesn't continue moving
+			 		}
+				}
 
 		 		// ...or handle if player is touching a tile with the Map property, which means...
 		 		let tile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x, this.tilePos.y);

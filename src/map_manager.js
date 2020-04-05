@@ -9,15 +9,15 @@ class MapManager {
 
 		this.townMap = this.scene.make.tilemap({ key: "townMap" });
 		this.townTiles = this.townMap.addTilesetImage("Tiled_Tileset", "tiles", 40, 40, 1, 2);
-		this.townLayer = this.townMap.createStaticLayer(0, this.townTiles, -2000, 0);
+		this.townLayer = this.townMap.createStaticLayer(0, this.townTiles, -5000, 0);
 
 		this.forestMap = this.scene.make.tilemap({ key: "forestMap" });
 		this.forestTiles = this.forestMap.addTilesetImage("Tiled_Tileset", "tiles", 40, 40, 1, 2);
-		this.forestLayer = this.forestMap.createStaticLayer(0, this.forestTiles, 2000, 0);
+		this.forestLayer = this.forestMap.createStaticLayer(0, this.forestTiles, 5000, 0);
 
 		this.roomMap = this.scene.make.tilemap({ key: "roomMap" });
 		this.roomTiles = this.roomMap.addTilesetImage("Tiled_Tileset", "tiles", 40, 40, 1, 2);
-		this.roomLayer = this.roomMap.createStaticLayer(0, this.roomTiles, 0, -1000);
+		this.roomLayer = this.roomMap.createStaticLayer(0, this.roomTiles, 0, -5000);
 
 
 		// Member Variables
@@ -101,6 +101,6 @@ class MapManager {
 		this.scene.player.go.y = this.scene.player.tileToWorldPos(this.scene.player.tilePos.x, this.scene.player.tilePos.y).y;
 
 		// Set camera bounds based on new map
-		this.scene.camera.go.setBounds(this.currentLayer.x + 40, this.currentLayer.y, this.currentLayer.width - 80, this.currentLayer.height);
+		this.scene.camera.resetBounds();
 	}
 }

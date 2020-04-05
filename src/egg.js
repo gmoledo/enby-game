@@ -3,8 +3,8 @@ class Egg {
 		this.scene = scene;
 
 		// Initialize egg game object to house map
-		this.go = this.scene.add.sprite(tileX * this.scene.mapManager.houseMap.tileWidth + this.scene.mapManager.houseLayer.x,
-										tileY * this.scene.mapManager.houseMap.tileHeight,
+		this.go = this.scene.add.sprite(tileX * this.scene.mapManager.townMap.tileWidth + this.scene.mapManager.townLayer.x,
+										tileY * this.scene.mapManager.townMap.tileHeight,
 										"egg");
 		this.go.setOrigin(0, 0);
 		this.scene.physicsManager.addToGroup(this.go, "static");

@@ -18,19 +18,26 @@ class ScriptManager {
 			let mom = this.scene.mom;
 			let player = this.scene.player;
 
-			this.scene.UIScene.black.setVisible(true);
 
-			mom.scriptMessage(0, "Knock, knock! Time to wake up sweetie!");
+			if (this.scriptAction == 0) {
+				this.scene.UIScene.black.setVisible(true);
+				
+				player.goto(22, 5);
+				mom.go.setVisible(false);
+
+				mom.scriptMessage(0, "Knock, knock! Time to wake up sweetie!");
+			}
 			if (this.scriptAction == 1) this.scene.UIScene.fadeBlack().setCallback("onComplete", () => this.updateScript(), [], this);
 			if (this.scriptAction == 2) 
 			{
-				mom.goto(15, 17);
+				mom.goto(12, 17);
+				mom.go.setVisible(true);
 				mom.go.setFrame(2);
 
-				mom.scriptMove(2, 15, 15, 350, 500).setCallback("onComplete", () => mom.scriptMessage(2, "Come on, up and at 'em.", 100), [], this);
+				mom.scriptMove(2, 12, 15, 350, 500).setCallback("onComplete", () => mom.scriptMessage(2, "Come on, up and at 'em.", 100), [], this);
 			}
 			player.scriptMessage(3, "*Yawns* Hmm?", 100);
-			if (this.scriptAction == 4) mom.scriptMove(4, 15, 11, 1000, 0).setCallback("onComplete", () => mom.scriptMove(4, 18, 11, 500, 0), [], this);
+			if (this.scriptAction == 4) mom.scriptMove(4, 12, 11, 1000, 0).setCallback("onComplete", () => mom.scriptMove(4, 15, 11, 500, 0), [], this);
 			mom.scriptMessage(5, "C'mon honey. I need you to go into town and get some eggs for me.");
 			if (this.scriptAction == 6) {
 				player.go.setFrame(1);
@@ -39,11 +46,11 @@ class ScriptManager {
 			}
 			mom.scriptMessage(7, "Not plenty enough. Now go on! And hurry back. I'll have something special for you when you get home.");
 			player.scriptMessage(8, "Okay, mother.");
-			if (this.scriptAction == 9) mom.scriptMove(9, 15, 11, 500, 0).setCallback("onComplete", () => mom.scriptMove(9, 15, 17, 1000, 0), [], this);
+			if (this.scriptAction == 9) mom.scriptMove(9, 12, 11, 500, 0).setCallback("onComplete", () => mom.scriptMove(9, 12, 18, 1100, 0), [], this);
 			if (this.scriptAction == 10) {
 				mom.go.setVisible(false);
 			}
-			player.scriptMove(10, 23, 5, 1000, 500);
+			player.scriptMove(10, 20, 5, 1000, 500);
 
 			if (this.scriptAction == 11) {
 				this.scene.state = "play";
@@ -60,16 +67,18 @@ class ScriptManager {
 				this.scene.mapManager.changeMap({Map: "House"});
 
 				player.exitHouseFlag = true;
-				player.goto(16, 4);
+				player.goto(17, 7);
 
-				player.scriptMove(0, 16, 9, 500, 0);
+				player.scriptMove(0, 17, 12, 750, 0);
 			}
 
 			if (this.scriptAction == 1) {
 				player.go.setFrame(2);
-				mom.goto(16, 4);
+				
+				mom.goto(17, 7);
 				mom.go.setVisible(true);
-				mom.scriptMove(1, 16, 5, 150, 0);
+
+				mom.scriptMove(1, 17, 8, 150, 0);
 			}
 			mom.scriptMessage(2, ["And remember the rhyme sweetie!", "What's the rhyme?"]);
 
@@ -84,7 +93,7 @@ class ScriptManager {
 				mom.scriptMessage(4, "That's right, honey. See you soon!");
 			}
 			if (this.scriptAction == 5) {
-				mom.scriptMove(5, 16, 4, 150, 0).setCallback("onComplete", () => {
+				mom.scriptMove(5, 17, 7, 150, 0).setCallback("onComplete", () => {
 					mom.go.setVisible(false);
 					this.updateScript();
 				}, [], this);

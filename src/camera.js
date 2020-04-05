@@ -9,11 +9,11 @@ class Camera {
 		this.go.startFollow(this.scene.player.go, true);
 
 		// Clamp camera to the current map's bounds
-		this.go.setBounds(	this.scene.mapManager.currentLayer.x + 40, this.scene.mapManager.currentLayer.y,
-							this.scene.mapManager.currentLayer.width - 80, this.scene.mapManager.currentLayer.height);
+		this.resetBounds();
 	}
 
-	update(dt) {
-		
+	resetBounds() {
+		this.go.setBounds(	this.scene.mapManager.currentLayer.x + 40, this.scene.mapManager.currentLayer.y,
+							this.scene.mapManager.currentLayer.width - 80, 18 * 40);
 	}
 }
