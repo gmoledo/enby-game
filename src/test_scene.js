@@ -70,6 +70,7 @@ class TestScene extends Phaser.Scene {
 		this.load.tilemapTiledJSON("townMap", "Tiled_data/TownMap.json");
 		this.load.tilemapTiledJSON("forestMap", "Tiled_data/ForestMap.json");
 		this.load.tilemapTiledJSON("roomMap", "Tiled_data/RoomMap.json")
+		this.load.tilemapTiledJSON("havenMap", "Tiled_data/HavenMap.json");
 
 	}
 

@@ -15,6 +15,10 @@ class MapManager {
 		this.forestTiles = this.forestMap.addTilesetImage("Tiled_Tileset", "tiles", 40, 40, 1, 2);
 		this.forestLayer = this.forestMap.createStaticLayer(0, this.forestTiles, 5000, 0);
 
+		this.havenMap = this.scene.make.tilemap({ key: "havenMap" });
+		this.havenTiles = this.havenMap.addTilesetImage("Tiled_Tileset", "tiles", 40, 40, 1, 2);
+		this.havenLayer = this.havenMap.createStaticLayer(0, this.havenTiles, 10000, 0);
+
 		this.roomMap = this.scene.make.tilemap({ key: "roomMap" });
 		this.roomTiles = this.roomMap.addTilesetImage("Tiled_Tileset", "tiles", 40, 40, 1, 2);
 		this.roomLayer = this.roomMap.createStaticLayer(0, this.roomTiles, 0, -5000);
@@ -55,7 +59,9 @@ class MapManager {
 		if (this.currentMap == this.roomMap) {
 			this.currentLayer = this.roomLayer;
 		}
-
+		if (this.currentMap == this.havenMap) {
+			this.currentLayer = this.havenLayer;
+		}
 	}
 
 	changeMap(tileProperties) {
@@ -71,6 +77,9 @@ class MapManager {
 		}
 		if (tileProperties.Map == "Room") {
 			this.setCurrentMap(this.roomMap);
+		}
+		if (tileProperties.Map == "Haven") {
+			this.setCurrentMap(this.havenMap);
 		}
 
 		// Sets players tile position based on the direction they left the map
