@@ -20,11 +20,12 @@ class Player {
 		// Tween for moving player
 		this.startPos = new Phaser.Math.Vector2(0, 0);
 		this.targetPos = new Phaser.Math.Vector2(0, 0);
-		this.walkSpeed = 5;
+		this.walkSpeed = 10;
 
 		this.name = "Player";
 
 		this.exitHouseFlag = false;
+		this.forestTriggerFlag = false;
 	}
 
 	update(dt) {
@@ -45,12 +46,14 @@ class Player {
 			moveY = 1;
 		}
 
+
+
 		// If moving player reaches destination...
 		if (this.tweening) {
 			if (this.go.x == this.targetPos.x && this.go.y == this.targetPos.y) {
 				this.tweening = false;
 
-				// ...handle if player is touching an egg.
+
 				if (this.scene.eggs) {
 			 		let eggGOs = this.scene.eggs.map((egg) => egg.go);
 			 		if (this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this)) {
@@ -94,7 +97,6 @@ class Player {
 
 		// If you're not in between tiles...
 		if (!this.tweening) {
-			
 			// Set sprite frame depending on direction moving
 			if (moveX == 1) {
 				this.go.setFrame(3);
@@ -108,7 +110,18 @@ class Player {
 			if (moveY == -1) {
 				this.go.setFrame(2);
 			}
-			
+
+			if (this.scene.forestBounds && this.scene.mapManager.currentMap == this.scene.mapManager.houseMap) {
+				for (let i = 0; i < this.scene.forestBounds.length; i++) {
+					let bound = this.scene.forestBounds[i];
+
+					if (this.tilePos.x + moveX == bound.tilePos.x && this.tilePos.y + moveY == bound.tilePos.y) {
+						this.hitForestTrigger();
+						return;
+					}
+				}
+			}
+
 			// ...check the destination tile for collision. If not...
 			let nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
 			if (nextTile && !nextTile.properties.Collision) {
@@ -163,8 +176,15 @@ class Player {
 	// When landing on egg, destroy egg and queue next egg message, pausing scene
 	getEgg(player, egg) {
 		egg.destroy();
-		this.UIScene.dialogueManager.queueMessages(this.name, Egg.messages[Egg.messageIndex++]);
+		this.UIScene.dialogueManager.queueMessages(this.name, Trigger.eggMessages[Trigger.eggMessageIndex++]);
 		this.scene.state = "pause";
+	}
+
+	hitForestTrigger(player, bound) {
+		if (!this.forestTriggerFlag) {
+			this.UIScene.dialogueManager.queueMessages(this.name, Trigger.boundMessage);
+			this.scene.state = "pause";
+		}
 	}
 
 	// Handles how the character moves during scripted motion

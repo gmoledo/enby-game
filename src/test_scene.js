@@ -65,13 +65,14 @@ class TestScene extends Phaser.Scene {
 		this.load.spritesheet("playerJacket", "assets/player_jacket.png", { frameWidth: 40, frameHeight: 80 });
 		this.load.image("egg", "assets/egg.png");
 
+		this.load.image("trigger", "assets/trigger.png");
+
 		this.load.image("tiles", "Tiled_data/Tileset.png");
 		this.load.tilemapTiledJSON("houseMap", "Tiled_data/HouseMap.json");
 		this.load.tilemapTiledJSON("townMap", "Tiled_data/TownMap.json");
 		this.load.tilemapTiledJSON("forestMap", "Tiled_data/ForestMap.json");
 		this.load.tilemapTiledJSON("roomMap", "Tiled_data/RoomMap.json")
 		this.load.tilemapTiledJSON("havenMap", "Tiled_data/HavenMap.json");
-
 	}
 
 	create() {
@@ -87,15 +88,24 @@ class TestScene extends Phaser.Scene {
 		this.scriptManager = new ScriptManager(this);
 
 		this.eggs = [];
-		this.eggs.push(new Egg(this, 24, 11));
-		this.eggs.push(new Egg(this, 17, 14));
-		this.eggs.push(new Egg(this, 11, 10));
-		this.eggs.push(new Egg(this, 3, 14));
-		this.eggs.push(new Egg(this, 3, 6));
-		this.eggs.push(new Egg(this, 13, 4));
-		this.eggs.push(new Egg(this, 3, 2));
+		this.eggs.push(new Trigger(this, "egg", 23, 11));
+		this.eggs.push(new Trigger(this, "egg", 17, 14));
+		this.eggs.push(new Trigger(this, "egg", 11, 10));
+		this.eggs.push(new Trigger(this, "egg", 3, 14));
+		this.eggs.push(new Trigger(this, "egg", 3, 6));
+		this.eggs.push(new Trigger(this, "egg", 13, 4));
+		this.eggs.push(new Trigger(this, "egg", 3, 2));
 
-		
+		this.forestTriggers = [];
+		for (let i = 0; i < this.mapManager.houseMap.height; i++) {
+			this.forestTriggers.push(new Trigger(this, "forestTrigger", 34, i));
+		}
+
+		this.forestBounds = [];
+		for (let i = 0; i < this.mapManager.houseMap.height; i++) {
+			this.forestBounds.push(new Trigger(this, "forestBound", 35, i));
+		}
+
 		// Player Class
 		this.player = new Player(this);
 

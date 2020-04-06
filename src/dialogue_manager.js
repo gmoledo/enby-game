@@ -59,6 +59,8 @@ class DialogueManager {
 	// Waits 0.3 seconds to broadcast that message is completed
 	skipMessage() {
 		this.letterRevealEvent.remove();
+		this.letterRevealEvent = null;
+
 		this.dialogueText.setText(this.messageQueue[0]);
 		this.scene.time.addEvent({
 			delay: 300,
@@ -121,7 +123,7 @@ class DialogueManager {
 		if (this.activePortrait) this.activePortrait.setVisible(false);
 
 		this.scene.time.addEvent({
-			delay: 100,
+			delay: 300,
 			callback: () => {
 				if (this.scene.TestScene.state == "pause") {
 					this.scene.TestScene.state = "play";
@@ -138,7 +140,7 @@ class DialogueManager {
 
 	update(dt) {
 		// If a control key is down while displaying message, skip to the end
-		if (this.letterRevealEvent && this.letterRevealEvent.getOverallProgress() < 1 && this.letterRevealEvent.getOverallProgress() > 0.2) {
+		if (this.letterRevealEvent && (this.letterRevealEvent.repeat - this.letterRevealEvent.repeatCount) > 5) {
 			if (this.scene.inputManager.anyKeyDown()) {
 				this.skipMessage();
 			}
