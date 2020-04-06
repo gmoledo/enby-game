@@ -69,7 +69,7 @@ class ScriptManager {
 				player.exitHouseFlag = true;
 				player.goto(17, 7);
 
-				player.scriptMove(0, 17, 12, 750, 0);
+				player.scriptMove(0, 17, 10, 500, 0);
 			}
 
 			if (this.scriptAction == 1) {
@@ -80,25 +80,29 @@ class ScriptManager {
 
 				mom.scriptMove(1, 17, 8, 150, 0);
 			}
-			mom.scriptMessage(2, ["And remember the rhyme sweetie!", "What's the rhyme?"]);
+			mom.scriptMessage(2, ["Oh, and the rhyme, sweetie! Don't forget the rhyme!"]);
 
 			if (this.scriptAction == 3) {
-				this.scene.UIScene.dialogueManager.dialogueText = this.scene.UIScene.dialogueManager.dynamicText;
-				player.scriptMessage(3, "From the woods we stay away,\nTo keep the creatures in at bay,\n" +
-						 				"They rip and tear and bite and slay,\nUntil they reap the light of day.");
+				player.scriptMessage(3, "Ugh...");
 			}
 
 			if (this.scriptAction == 4) {
-				this.scene.UIScene.dialogueManager.dialogueText = this.scene.UIScene.dialogueManager.staticText;
-				mom.scriptMessage(4, "That's right, honey. See you soon!");
+				this.scene.UIScene.dialogueManager.dialogueText = this.scene.UIScene.dialogueManager.dynamicText;
+				player.scriptMessage(4, "From the woods we stay away,\nTo keep the creatures in at bay,\n" +
+						 				"They rip and tear and bite and slay,\nUntil they reap the light of day.");
 			}
+
 			if (this.scriptAction == 5) {
-				mom.scriptMove(5, 17, 7, 150, 0).setCallback("onComplete", () => {
+				this.scene.UIScene.dialogueManager.dialogueText = this.scene.UIScene.dialogueManager.staticText;
+				mom.scriptMessage(5, "That's right, honey. See you soon!");
+			}
+			if (this.scriptAction == 6) {
+				mom.scriptMove(6, 17, 7, 150, 0).setCallback("onComplete", () => {
 					mom.go.setVisible(false);
 					this.updateScript();
 				}, [], this);
 			}
-			if (this.scriptAction == 6) {
+			if (this.scriptAction == 7) {
 				player.go.setFrame(0);
 				this.scene.state = "play";
 				this.scriptAction = -1;

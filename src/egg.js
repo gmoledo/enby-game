@@ -12,9 +12,13 @@ class Egg {
 		// Static members so that no matter what egg you get first, it'll give you the same message
 		if (!Egg.messages) {
 			Egg.messages = [
-				["This is the first message of the first egg.", "Message 2 of Egg 1", "Message 3 of Egg 1"],
-				["This is the first message of the second egg.", "Message 2 of Egg 2", "Message 3 of Egg 2"],
-				["This is the first message of the third egg.", "Message 2 of Egg 3", "Message 3 of Egg 3"]
+				["Egg 1"],
+				["Egg 2"],
+				["Egg 3"],
+				["Egg 4"],
+				["Egg 5"],
+				["Egg 6"],
+				["Egg 7"]
 			];
 			Egg.messageIndex = 0;
 		}
