@@ -110,6 +110,7 @@ class DialogueManager {
 
 			if (displayText == this.messageQueue[0]) {
 				this.messageCompleted = true;
+				this.letterRevealEvent = null;
 			}
 
 			this.dialogueText.setText(displayText);
