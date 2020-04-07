@@ -95,7 +95,8 @@ class Player {
 			if (this.scene.eggs) {
 		 		let eggGOs = this.scene.eggs.map((egg) => egg.go);
 		 		if (this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this)) {
-		 			return; // Return if found so that player doesn't continue moving
+		 			moveX = 0;
+		 			moveY = 0;
 		 		}
 			}
 
