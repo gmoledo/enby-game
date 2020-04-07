@@ -34,7 +34,7 @@ class Trigger {
 			];
 			Trigger.eggMessageIndex = 0;
 		}
-		if (this.triggerType == "forestTrigger") {
+		if (this.triggerType == "forestBound") {
 			Trigger.boundMessage = ["There's creatures in there.", "I should go.", "Time to find some eggs!"];
 		}
 	}

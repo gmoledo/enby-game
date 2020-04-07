@@ -124,16 +124,13 @@ class DialogueManager {
 		if (this.activePortrait) this.activePortrait.setVisible(false);
 
 		this.scene.time.addEvent({
-			delay: 300,
+			delay: this.scene.state == "pause" ? 300 : 0,
 			callback: () => {
-				if (this.scene.TestScene.state == "pause") {
-					this.scene.TestScene.state = "play";
+				if (this.activePortrait == this.playerPortrait) {
+					this.scene.TestScene.player.onDialogueClose();
 				}
-
-				// If the dialogue box is closed as part of the script, figure out who was
-				// speaking and update their script
-				if (this.scene.TestScene.state == "script") {
-					this.scene.TestScene.scriptManager.updateScript();
+				if (this.activePortrait != this.playerPortrait) {
+					this.scene.TestScene.mom.onDialogueClose();
 				}
 			}
 		});

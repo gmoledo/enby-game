@@ -107,9 +107,20 @@ class ScriptManager {
 				this.scene.state = "play";
 				this.scriptAction = -1;
 			}
-
 		}
-		
+		console.log(this.scriptAction, this.script, this.updateScriptAction);
+		if (this.script == "ForestBound" && this.updateScriptAction) {
+			let player = this.scene.player;
+
+			if (this.scriptAction == 0) player.scriptMessage(0, Trigger.boundMessage);
+			if (this.scriptAction == 1) {
+				player.scriptMove(1, player.tilePos.x - 1, player.tilePos.y, 250, 0);
+			}
+			if (this.scriptAction == 2) {
+				this.scene.state = "play";
+				this.scriptAction = -1;
+			}
+		}
 		this.updateScriptAction = false;
 	}
 }

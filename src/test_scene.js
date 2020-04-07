@@ -96,11 +96,6 @@ class TestScene extends Phaser.Scene {
 		this.eggs.push(new Trigger(this, "egg", 13, 4));
 		this.eggs.push(new Trigger(this, "egg", 3, 2));
 
-		this.forestTriggers = [];
-		for (let i = 0; i < this.mapManager.houseMap.height; i++) {
-			this.forestTriggers.push(new Trigger(this, "forestTrigger", 34, i));
-		}
-
 		this.forestBounds = [];
 		for (let i = 0; i < this.mapManager.houseMap.height; i++) {
 			this.forestBounds.push(new Trigger(this, "forestBound", 35, i));

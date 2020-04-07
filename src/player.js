@@ -25,7 +25,7 @@ class Player {
 		this.name = "Player";
 
 		this.exitHouseFlag = false;
-		this.forestTriggerFlag = false;
+		this.forestBoundFlag = false;
 	}
 
 	update(dt) {
@@ -112,12 +112,14 @@ class Player {
 			}
 
 			if (this.scene.forestBounds && this.scene.mapManager.currentMap == this.scene.mapManager.houseMap) {
-				for (let i = 0; i < this.scene.forestBounds.length; i++) {
-					let bound = this.scene.forestBounds[i];
+				if (!this.forestBoundFlag) {
+					for (let i = 0; i < this.scene.forestBounds.length; i++) {
+						let bound = this.scene.forestBounds[i];
 
-					if (this.tilePos.x + moveX == bound.tilePos.x && this.tilePos.y + moveY == bound.tilePos.y) {
-						this.hitForestTrigger();
-						return;
+						if (this.tilePos.x + moveX == bound.tilePos.x && this.tilePos.y + moveY == bound.tilePos.y) {
+							this.hitForestTrigger();
+							return;
+						}
 					}
 				}
 			}
@@ -178,13 +180,15 @@ class Player {
 		egg.destroy();
 		this.UIScene.dialogueManager.queueMessages(this.name, Trigger.eggMessages[Trigger.eggMessageIndex++]);
 		this.scene.state = "pause";
+		if (Trigger.eggMessageIndex == Trigger.eggMessages.length) {
+			this.forestBoundFlag = true;
+		}
 	}
 
 	hitForestTrigger(player, bound) {
-		if (!this.forestTriggerFlag) {
-			this.UIScene.dialogueManager.queueMessages(this.name, Trigger.boundMessage);
-			this.scene.state = "pause";
-		}
+		this.scene.state = "script";
+		this.scene.scriptManager.script = "ForestBound";
+		this.scene.scriptManager.updateScript();
 	}
 
 	// Handles how the character moves during scripted motion
@@ -232,6 +236,18 @@ class Player {
 			this.speaking = true;
 			this.UIScene.dialogueManager.queueMessages(this.name, message);
 		}});
+	}
+
+	onDialogueClose() {
+		if (this.scene.state == "pause") {
+			this.scene.state = "play";
+		}
+
+		// If the dialogue box is closed as part of the script, figure out who was
+		// speaking and update their script
+		if (this.scene.state == "script") {
+			this.scene.scriptManager.updateScript();
+		}
 	}
 
 	goto(tileX, tileY) {
