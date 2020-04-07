@@ -124,7 +124,7 @@ class DialogueManager {
 		if (this.activePortrait) this.activePortrait.setVisible(false);
 
 		this.scene.time.addEvent({
-			delay: this.scene.state == "pause" ? 300 : 0,
+			delay: this.scene.TestScene.state == "pause" ? 300 : 0,
 			callback: () => {
 				if (this.activePortrait == this.playerPortrait) {
 					this.scene.TestScene.player.onDialogueClose();

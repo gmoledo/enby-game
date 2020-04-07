@@ -33,6 +33,10 @@ class InputManager {
 			}
 		});
 
+		this.controls.shift.on("down", (key) => {
+			this.scene.player.walkMultiplier = this.scene.player.walkMultiplier == 1 ? 2 : 1;
+		});
+
 		// When q key is pressed, toggle shader
 		this.controls.q.on("down", (key) => {
 			this.scene.camera.go.renderToTexture = !this.scene.camera.go.renderToTexture;
