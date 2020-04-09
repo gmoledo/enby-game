@@ -151,6 +151,6 @@ class DialogueManager {
 			}
 		}
 
-		this.rhymeWave = (this.rhymeWave + Math.PI / 30) % (Math.PI * 2);
+		this.rhymeWave = (this.rhymeWave + Math.PI * 2.5 * dt) % (Math.PI * 2);
 	}
 }

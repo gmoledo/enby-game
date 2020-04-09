@@ -137,7 +137,12 @@ class TestScene extends Phaser.Scene {
 	}
 
 	startGame() {
-		this.scriptManager.script = "Intro";
-		this.scriptManager.updateScript();
+		this.time.addEvent({
+			delay: 1000,
+			callback: () => {
+				this.scriptManager.script = "Intro";
+				this.scriptManager.updateScript();
+			}
+		});
 	}
 }

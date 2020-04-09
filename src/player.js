@@ -58,6 +58,17 @@ class Player {
 		this.go.anims.load("walkRight");
 		this.go.anims.load("walkUp");
 
+		var outOfBedConfig = {
+			key: "outOfBed",
+			frames: this.scene.anims.generateFrameNumbers("playerBase", {frames: [2, 3, 0, 1]}),
+			frameRate: 4,
+			repeat: 1,
+			onComplete: () => {this.go.anims.currentAnim = this.walkLeftAnim;},
+			onCompleteScope: this
+		}
+		this.outOfBedAnim = this.scene.anims.create(outOfBedConfig);
+		this.go.anims.load("outOfBed");
+
 		this.go.anims.currentAnim = null;
 
 
@@ -135,7 +146,25 @@ class Player {
 
 		// If you're not in between tiles...
 		if (!this.tweening) {
-			
+
+			// Set sprite frame depending on direction moving
+			if (moveX == 1) {
+				this.go.anims.play("walkRight", true);
+				this.go.currentAnim = this.walkRightAnim;
+			}
+			if (moveX == -1) {
+				this.go.anims.play("walkLeft", true);
+				this.go.currentAnim = this.walkLeftAnim;
+			}
+			if (moveY == 1) {
+				this.go.anims.play("walkDown", true);
+				this.go.currentAnim = this.walkDownAnim;
+			}
+			if (moveY == -1) {
+				this.go.anims.play("walkUp", true);
+				this.go.currentAnim = this.walkUpAnim;
+			}
+
 			let nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
 			if (!nextTile || nextTile.properties.Collision) {
 				moveX = 0;
@@ -156,23 +185,6 @@ class Player {
 				}
 			}
 
-			// Set sprite frame depending on direction moving
-			if (moveX == 1) {
-				this.go.anims.play("walkRight", true);
-				this.go.currentAnim = this.walkRightAnim;
-			}
-			if (moveX == -1) {
-				this.go.anims.play("walkLeft", true);
-				this.go.currentAnim = this.walkLeftAnim;
-			}
-			if (moveY == 1) {
-				this.go.anims.play("walkDown", true);
-				this.go.currentAnim = this.walkDownAnim;
-			}
-			if (moveY == -1) {
-				this.go.anims.play("walkUp", true);
-				this.go.currentAnim = this.walkUpAnim;
-			}
 			if (moveX == 0 && moveY == 0) {
 				if (this.go.anims.isPlaying) {
 					this.pauseAnimation();
@@ -241,7 +253,6 @@ class Player {
 	}
 
 	pauseAnimation() {
-		console.log(this.go.currentAnim);
 		let frame = -1;
 		if (this.go.currentAnim.key == "walkUp") frame = 2;
 		if (this.go.currentAnim.key == "walkDown") frame = 0;
@@ -304,10 +315,36 @@ class Player {
 		});
 	}
 
+	scriptOutOfBed(scriptAction) {
+		this.scene.time.addEvent({
+			delay: 700,
+			callback: () => {
+				this.go.anims.play("outOfBed");
+			}
+		});
+
+		this.tilePos.x = this.tilePos.x - 2;
+		
+		return this.scene.tweens.add({
+			targets: this.go,
+			x: this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x,
+			y: this.tileToWorldPos(this.tilePos.x, this.tilePos.y).y,
+			duration: 8 * this.walkSpeed,
+			delay: 700,
+			onComplete: () => {
+				this.scene.scriptManager.updateScript();
+			}
+		});
+	}
+
 	// Handles how the characters speak during scripted dialogue
 	scriptMessage(scriptAction, message, delay) {
 		if (scriptAction != this.scene.scriptManager.scriptAction) {
 			return;
+		}
+
+		if (delay == 0) {
+			delay = 150;
 		}
 
 		this.scene.time.addEvent({ delay: delay, callback: () => {
