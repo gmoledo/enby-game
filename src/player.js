@@ -141,8 +141,17 @@ class Player {
 					moveX = 0;
 					moveY = 1;
 				}
+				console.log("A");
+				if (this.scene.mapManager.currentMap == this.scene.mapManager.roomMap) {
+					this.scene.mirrorPlayer.goto(11, 18);
+					this.scene.mirrorPlayer.go.anims.play("walkUp", true);
+					this.scene.mirrorPlayer.go.currentAnim = this.walkUpAnim;
+					this.scene.mirrorPlayer.move(moveX, moveY);
+				}
 			}
 		}
+
+		let updatePlayer = false;
 
 		// If you're not in between tiles...
 		if (!this.tweening) {
@@ -192,10 +201,17 @@ class Player {
 			}
 
 			this.move(moveX, moveY);
+			if (moveX == 0 && moveY == 0) {
+				updatePlayer = false;
+			}
+			else {
+				updatePlayer = true;
+			}
 		}
 		else {
 			this.tweenMovement();
 		}
+		return updatePlayer;
 	}
 
 	move(dx, dy) {
@@ -264,9 +280,13 @@ class Player {
 	}
 
 	// Handles how the character moves during scripted motion
-	scriptMove(scriptAction, tileX, tileY, duration, delay) {
+	scriptMove(scriptAction, tileX, tileY, duration, delay, update) {
 		if (scriptAction != this.scene.scriptManager.scriptAction) {
 			return;
+		}
+
+		if (update === undefined) {
+			update = true;
 		}
 
 		// Change character's sprite depending on direction of movement
@@ -310,7 +330,9 @@ class Player {
 			duration: actualDuration,
 			delay: delay,
 			onComplete: () => {
-				this.scene.scriptManager.updateScript();
+				if (update) {
+					this.scene.scriptManager.updateScript();
+				}
 			}
 		});
 	}

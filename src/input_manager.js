@@ -35,6 +35,7 @@ class InputManager {
 
 		this.controls.shift.on("down", (key) => {
 			this.scene.player.walkMultiplier = this.scene.player.walkMultiplier == 1 ? 2 : 1;
+			this.scene.mirrorPlayer.walkMultiplier = this.scene.player.walkMultiplier;
 		});
 
 		// When q key is pressed, toggle shader

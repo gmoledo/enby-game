@@ -16,6 +16,7 @@ class ScriptManager {
 		if (this.script == "Intro" && this.updateScriptAction) {
 
 			let mom = this.scene.mom;
+			let mirrorMom = this.scene.mirrorMom;
 			let player = this.scene.player;
 
 
@@ -32,18 +33,24 @@ class ScriptManager {
 			if (this.scriptAction == 2) 
 			{
 				mom.goto(12, 17);
+				mirrorMom.goto(11, 17);
+
 				mom.go.setVisible(true);
 				mom.go.setFrame(2);
 
-				mom.scriptMove(2, 12, 15, 2, 500);
+				mom.scriptMove(2, 12, 15, 2, 500, true);
+				mirrorMom.scriptMove(2, 11, 15, 2, 500, false);
 			}
 			if (this.scriptAction == 3) {
 				mom.scriptMessage(3, "Come on, up and at 'em.", 0);
 			}
 
 			player.scriptMessage(4, "*Yawns* Hmm?", 0);
-			if (this.scriptAction == 5) mom.scriptMove(5, 12, 11, 4, 0);
-			if (this.scriptAction == 6) mom.scriptMove(6, 15, 11, 3, 0);
+			if (this.scriptAction == 5) {
+				mom.scriptMove(5, 12, 11, 4, 0, true);
+				mirrorMom.scriptMove(5, 11, 11, 4, 0, false);
+			}
+			if (this.scriptAction == 6) mom.scriptMove(6, 15, 11, 3, 0, true);
 			mom.scriptMessage(7, "C'mon honey. I need you to go into town and get some eggs for me.", 0);
 			if (this.scriptAction == 8) {
 				player.go.setFrame(1);
@@ -52,7 +59,11 @@ class ScriptManager {
 			}
 			mom.scriptMessage(9, "Not plenty enough. Now go on! And hurry back. I'll have something special for you when you get home.", 0);
 			player.scriptMessage(10, "Okay, mother.", 0);
-			if (this.scriptAction == 11) mom.scriptMove(11, 12, 11, 3, 0).setCallback("onComplete", () => mom.scriptMove(11, 12, 18, 7, 0), [], this);
+			if (this.scriptAction == 11) mom.scriptMove(11, 12, 11, 3, 0, false).setCallback("onComplete", () => {
+				mom.scriptMove(11, 12, 18, 7, 0, true);
+				mirrorMom.goto(11, 11);
+				mirrorMom.scriptMove(11, 11, 18, 7, 0, false);
+			}, [], this);
 			if (this.scriptAction == 12) {
 				mom.go.setVisible(false);
 			}

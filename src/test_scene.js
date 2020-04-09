@@ -66,6 +66,8 @@ class TestScene extends Phaser.Scene {
 		this.load.image("egg", "assets/egg.png");
 
 		this.load.image("trigger", "assets/trigger.png");
+		this.load.image("white", "assets/white.png");
+		this.load.image("mirror", "assets/mirror.png");
 
 		this.load.image("tiles", "Tiled_data/Tileset.png");
 		this.load.tilemapTiledJSON("houseMap", "Tiled_data/HouseMap.json");
@@ -82,11 +84,12 @@ class TestScene extends Phaser.Scene {
 		// Class for handling physics related logic (might not be necessary)
 		this.physicsManager = new PhysicsManager(this);
 
-		// Class for handling tilemap and grid-related structures and logic
-		this.mapManager = new MapManager(this);
-
 		this.scriptManager = new ScriptManager(this);
 
+
+		// Class for handling tilemap and grid-related structures and logic
+		this.mapManager = new MapManager(this);
+		
 		this.eggs = [];
 		this.eggs.push(new Trigger(this, "egg", 23, 11));
 		this.eggs.push(new Trigger(this, "egg", 17, 14));
@@ -111,6 +114,23 @@ class TestScene extends Phaser.Scene {
 
 		this.cameras.main.setRenderToTexture(this.customPipeline);
 
+		this.mirror = this.add.sprite(	11 * this.mapManager.roomMap.tileWidth + this.mapManager.roomLayer.x,
+										13 * this.mapManager.roomMap.tileHeight + this.mapManager.roomLayer.y,
+										"mirror")
+		this.mirror.setOrigin(0, 0);
+
+		this.mirrorPlayer = new MirrorPlayer(this);
+		this.mirrorPlayer.goto(3, 5);
+		this.children.sendToBack(this.mirrorPlayer.go);
+
+		this.mirrorMom = new Mom(this);
+		this.children.sendToBack(this.mirrorMom.go);
+
+		this.white = this.add.sprite(0, 0, "white");
+		this.white.setVisible(true);
+		this.white.setOrigin(0.5, 0.5);
+		this.white.setScale(200);
+		this.children.sendToBack(this.white);
 
 		// Optional intro sequence for demonstration purposes
 		this.state = "script";
@@ -128,7 +148,10 @@ class TestScene extends Phaser.Scene {
 		this.inputManager.update(dt);
 
 		if (this.state == "play") {
-			this.player.update(dt);
+			let playerUpdated = this.player.update(dt)
+			if (this.mapManager.currentMap == this.mapManager.roomMap) {
+				this.mirrorPlayer.update(dt, playerUpdated);
+			}
 		}
 
 		if (this.state == "script") {
