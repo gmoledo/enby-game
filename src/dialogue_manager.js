@@ -95,7 +95,7 @@ class DialogueManager {
 			}
 		}
 
-		if (this.scene.TestScene.player.go.y < 200) {
+		if (this.scene.TestScene.mapManager.currentLayer.y + 200 > this.scene.TestScene.player.go.y) {
 			this.dialogueBox.y = this.scene.cameras.main.height - this.dialogueBox.height + 40;
 			this.staticText.y = this.dialogueBox.y - 58;
 			this.dynamicText.y = this.dialogueBox.y - 58;
