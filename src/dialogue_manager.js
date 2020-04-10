@@ -95,6 +95,19 @@ class DialogueManager {
 			}
 		}
 
+		if (this.scene.TestScene.player.go.y < 200) {
+			this.dialogueBox.y = this.scene.cameras.main.height - this.dialogueBox.height + 40;
+			this.staticText.y = this.dialogueBox.y - 58;
+			this.dynamicText.y = this.dialogueBox.y - 58;
+			if (this.activePortrait) this.activePortrait.y = this.dialogueBox.y;
+		}
+		else {
+			this.dialogueBox.y = 80;
+			this.staticText.y = 22;
+			this.dynamicText.y = 22;
+			if (this.activePortrait) this.activePortrait.y = this.dialogueBox.y;
+		}
+
 		this.letterRevealEvent = this.scene.time.addEvent({
 			repeat: this.messageQueue[0].length - 1,
 			callback: this.addLetter,
@@ -109,8 +122,13 @@ class DialogueManager {
 			let displayText = this.messageQueue[0].substring(0, this.dialogueText.text.length+1);
 
 			if (displayText == this.messageQueue[0]) {
-				this.messageCompleted = true;
-				this.letterRevealEvent = null;
+				this.scene.time.addEvent({
+					delay: 300,
+					callback: () => {
+						this.messageCompleted = true;
+						this.letterRevealEvent = null;
+					}
+				});
 			}
 
 			this.dialogueText.setText(displayText);
