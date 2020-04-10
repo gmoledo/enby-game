@@ -60,7 +60,7 @@ class Player {
 
 		var outOfBedConfig = {
 			key: "outOfBed",
-			frames: this.scene.anims.generateFrameNumbers("playerBase", {frames: [2, 3, 0, 1]}),
+			frames: this.scene.anims.generateFrameNumbers("playerBase", {frames: [1, 2, 3, 0]}),
 			frameRate: 4,
 			repeat: 1,
 			onComplete: () => {this.go.anims.currentAnim = this.walkLeftAnim;},
@@ -105,10 +105,17 @@ class Player {
 
 			if (this.scene.eggs) {
 		 		let eggGOs = this.scene.eggs.map((egg) => egg.go);
-		 		if (this.scene.physics.world.overlap(this.go, eggGOs, this.getEgg, () => true, this)) {
+		 		if (this.scene.physics.world.overlap(this.go, eggGOs, this.hitEggTrigger, () => true, this)) {
 		 			moveX = 0;
 		 			moveY = 0;
 		 		}
+			}
+
+			if (this.scene.mirrorTrigger) {
+				if (this.scene.physics.world.overlap(this.go, this.scene.mirrorTrigger.go, this.hitMirrorTrigger, () => true, this)) {
+					moveX = 0;
+					moveY = 0;
+				}
 			}
 
 	 		// ...or handle if player is touching a tile with the Map property, which means...
@@ -141,7 +148,7 @@ class Player {
 					moveX = 0;
 					moveY = 1;
 				}
-				console.log("A");
+
 				if (this.scene.mapManager.currentMap == this.scene.mapManager.roomMap) {
 					this.scene.mirrorPlayer.goto(11, 18);
 					this.scene.mirrorPlayer.go.anims.play("walkUp", true);
@@ -253,8 +260,37 @@ class Player {
 		}
 	}
 
+	pauseAnimation() {
+		let frame = -1;
+		if (this.go.currentAnim.key == "walkUp") frame = 2;
+		if (this.go.currentAnim.key == "walkDown") frame = 0;
+		if (this.go.currentAnim.key == "walkLeft") frame = 1;
+		if (this.go.currentAnim.key == "walkRight") frame = 3;
+
+		this.go.setFrame(frame);
+		this.go.anims.stop();
+	}
+
 	// When landing on egg, destroy egg and queue next egg message, pausing scene
-	getEgg(player, egg) {
+	hitMirrorTrigger(player, mirror) {
+		this.scene.mirrorTrigger.go.destroy();
+		this.pauseAnimation();
+		this.scene.mirrorPlayer.pauseAnimation();
+
+		this.scene.state = "pause";
+
+		this.scene.time.addEvent({
+			delay: 500,
+			callback: () => {
+				this.scene.player.go.setFrame(1);
+				this.scene.mirrorPlayer.go.setFrame(3);
+
+				this.UIScene.dialogueManager.queueMessages(this.name, Trigger.mirrorMessage);
+			}
+		});
+	}
+
+	hitEggTrigger (player, egg) {
 		egg.destroy();
 		this.UIScene.dialogueManager.queueMessages(this.name, Trigger.eggMessages[Trigger.eggMessageIndex++]);
 		this.scene.state = "pause";
@@ -268,23 +304,10 @@ class Player {
 		this.scene.state = "pause";
 	}
 
-	pauseAnimation() {
-		let frame = -1;
-		if (this.go.currentAnim.key == "walkUp") frame = 2;
-		if (this.go.currentAnim.key == "walkDown") frame = 0;
-		if (this.go.currentAnim.key == "walkLeft") frame = 1;
-		if (this.go.currentAnim.key == "walkRight") frame = 3;
 
-		this.go.setFrame(frame);
-		this.go.anims.stop();
-	}
 
 	// Handles how the character moves during scripted motion
-	scriptMove(scriptAction, tileX, tileY, duration, delay, update) {
-		if (scriptAction != this.scene.scriptManager.scriptAction) {
-			return;
-		}
-
+	scriptMove(tileX, tileY, duration, delay, update) {
 		if (update === undefined) {
 			update = true;
 		}
@@ -337,34 +360,59 @@ class Player {
 		});
 	}
 
-	scriptOutOfBed(scriptAction) {
-		this.scene.time.addEvent({
-			delay: 700,
-			callback: () => {
-				this.go.anims.play("outOfBed");
-			}
-		});
-
+	scriptOutOfBed() {
 		this.tilePos.x = this.tilePos.x - 2;
-		
-		return this.scene.tweens.add({
+
+		let up = {
 			targets: this.go,
-			x: this.tileToWorldPos(this.tilePos.x, this.tilePos.y).x,
-			y: this.tileToWorldPos(this.tilePos.x, this.tilePos.y).y,
-			duration: 8 * this.walkSpeed,
-			delay: 700,
+			y: this.go.y - 20,
+			x: this.go.x - 40,
+			duration: 200,
+			delay: 200,
+			ease: "Linear",
+			onComplete: () => {
+				this.go.setFrame(1);
+			}
+		};
+		let down = {
+			targets: this.go, 
+			y: this.go.y,
+			x: this.go.x - 80,
+			duration: 200,
+			ease: "Linear",
 			onComplete: () => {
 				this.scene.scriptManager.updateScript();
 			}
+		}
+		this.scene.tweens.timeline({
+			tweens: [up, down]
+		});
+	}
+
+	scriptJump() {
+		let up = {
+			targets: this.go,
+			y: this.go.y - 20,
+			duration: 150,
+			ease: "QuadIn",
+			onComplete: () => {
+				this.go.setFrame(0);
+			}
+		};
+		let down = {
+			targets: this.go,
+			y: this.go.y,
+			duration: 150,
+			ease: "QuadOut"
+		};
+
+		this.scene.tweens.timeline({
+			tweens: [up, down]
 		});
 	}
 
 	// Handles how the characters speak during scripted dialogue
-	scriptMessage(scriptAction, message, delay) {
-		if (scriptAction != this.scene.scriptManager.scriptAction) {
-			return;
-		}
-
+	scriptMessage(message, delay) {
 		if (delay == 0) {
 			delay = 150;
 		}

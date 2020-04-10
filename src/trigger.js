@@ -17,7 +17,12 @@ class Trigger {
 											tileY * this.scene.mapManager.houseMap.tileHeight,
 											"trigger");
 		}
-
+		if (this.triggerType == "mirrorTrigger") {
+			this.go = this.scene.add.sprite(tileX * this.scene.mapManager.roomMap.tileWidth + this.scene.mapManager.roomLayer.x,
+											tileY * this.scene.mapManager.roomMap.tileHeight + this.scene.mapManager.roomLayer.y, 
+											"trigger");
+			console.log("D");
+		}
 		this.go.setOrigin(0, 0);
 		this.scene.physicsManager.addToGroup(this.go, "static");
 
@@ -36,6 +41,9 @@ class Trigger {
 		}
 		if (this.triggerType == "forestBound") {
 			Trigger.boundMessage = ["There's creatures in there.", "I should go.", "Time to find some eggs!"];
+		}
+		if (this.triggerType == "mirrorTrigger") {
+			Trigger.mirrorMessage = [". . .", "Something's . . . off. Is it my hair?", ". . .", "No, it's not that. Maybe my shirt. . ."]
 		}
 	}
 }

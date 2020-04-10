@@ -89,6 +89,8 @@ class TestScene extends Phaser.Scene {
 
 		// Class for handling tilemap and grid-related structures and logic
 		this.mapManager = new MapManager(this);
+
+		this.mirrorTrigger = new Trigger(this, "mirrorTrigger", 12, 15);
 		
 		this.eggs = [];
 		this.eggs.push(new Trigger(this, "egg", 23, 11));
@@ -149,7 +151,7 @@ class TestScene extends Phaser.Scene {
 
 		if (this.state == "play") {
 			let playerUpdated = this.player.update(dt)
-			if (this.mapManager.currentMap == this.mapManager.roomMap) {
+			if (this.mapManager.currentMap == this.mapManager.roomMap && this.state == "play") {
 				this.mirrorPlayer.update(dt, playerUpdated);
 			}
 		}
