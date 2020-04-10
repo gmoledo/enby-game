@@ -43,7 +43,8 @@ class Trigger {
 			Trigger.boundMessage = ["There's creatures in there.", "I should go.", "Time to find some eggs!"];
 		}
 		if (this.triggerType == "mirrorTrigger") {
-			Trigger.mirrorMessage = [". . .", "Something's . . . off. Is it my hair?", ". . .", "No, it's not that. Maybe my shirt. . ."]
+			Trigger.mirrorMessage = [	". . .", "Something's . . . off. Is it my hair?", ". . .",
+										"No. No, it's the shirt. And the shorts. God, these clothes look . . . wrong.", "I hope no one notices. . ."]
 		}
 	}
 }

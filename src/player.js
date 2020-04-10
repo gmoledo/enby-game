@@ -280,12 +280,16 @@ class Player {
 		this.scene.state = "pause";
 
 		this.scene.time.addEvent({
-			delay: 500,
+			delay: 1000,
 			callback: () => {
 				this.scene.player.go.setFrame(1);
 				this.scene.mirrorPlayer.go.setFrame(3);
-
-				this.UIScene.dialogueManager.queueMessages(this.name, Trigger.mirrorMessage);
+				this.scene.time.addEvent({
+					delay: 500,
+					callback: () => {
+						this.UIScene.dialogueManager.queueMessages(this.name, Trigger.mirrorMessage);
+					}
+				});
 			}
 		});
 	}
@@ -413,7 +417,7 @@ class Player {
 
 	// Handles how the characters speak during scripted dialogue
 	scriptMessage(message, delay) {
-		if (delay == 0) {
+		if (delay == 0 || delay === undefined) {
 			delay = 150;
 		}
 
