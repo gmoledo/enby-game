@@ -6,22 +6,20 @@ class Trigger {
 
 		this.tilePos = new Phaser.Math.Vector2(tileX, tileY);
 		
-		// Initialize egg game object to house map
+		let layer = null;
+		if (this.triggerType == "egg" || this.triggerType == "storeTrigger") layer = this.scene.mapManager.townLayer;
+		if (this.triggerType == "mirrorTrigger") layer = this.scene.mapManager.roomLayer;
+		if (this.triggerType == "door" || this.triggerType == "forestTrigger" || this.triggerType == "forestBound") layer = this.scene.mapManager.houseLayer;
+
 		if (this.triggerType == "egg") {
-			this.go = this.scene.add.sprite(tileX * this.scene.mapManager.townMap.tileWidth + this.scene.mapManager.townLayer.x,
-											tileY * this.scene.mapManager.townMap.tileHeight,
+			this.go = this.scene.add.sprite(tileX * 40 + layer.x,
+											tileY * 40 + layer.y,
 											"egg");
 		}
-		if (this.triggerType == "forestTrigger" || this.triggerType == "forestBound") {
-			this.go = this.scene.add.sprite(tileX * this.scene.mapManager.houseMap.tileWidth + this.scene.mapManager.houseLayer.x,
-											tileY * this.scene.mapManager.houseMap.tileHeight,
+		else {
+			this.go = this.scene.add.sprite(tileX * 40 + layer.x,
+											tileY * 40 + layer.y,
 											"trigger");
-		}
-		if (this.triggerType == "mirrorTrigger") {
-			this.go = this.scene.add.sprite(tileX * this.scene.mapManager.roomMap.tileWidth + this.scene.mapManager.roomLayer.x,
-											tileY * this.scene.mapManager.roomMap.tileHeight + this.scene.mapManager.roomLayer.y, 
-											"trigger");
-			console.log("D");
 		}
 		this.go.setOrigin(0, 0);
 		this.scene.physicsManager.addToGroup(this.go, "static");
@@ -39,12 +37,15 @@ class Trigger {
 			];
 			Trigger.eggMessageIndex = 0;
 		}
-		if (this.triggerType == "forestBound") {
-			Trigger.boundMessage = ["There's creatures in there.", "I should go.", "Time to find some eggs!"];
-		}
 		if (this.triggerType == "mirrorTrigger") {
 			Trigger.mirrorMessage = [	". . .", "Something's . . . off. Is it my hair?", ". . .",
 										"No. No, it's the shirt. And the shorts. God, these clothes look . . . wrong.", "I hope no one notices. . ."]
+		}
+		if (this.triggerType == "door") {
+			Trigger.doorMessage = ["You'd better be getting those eggs!"]
+		}
+		if (this.triggerType == "forestBound") {
+			Trigger.boundMessage = ["I should go get those eggs."];
 		}
 	}
 }

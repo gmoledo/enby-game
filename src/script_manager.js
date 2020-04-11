@@ -10,7 +10,7 @@ class ScriptManager {
 	updateScript() {
 		this.scriptAction++;
 		this.updateScriptAction = true;
-	}	
+	}
 
 	update() {
 		if (this.script == "Intro" && this.updateScriptAction) {
@@ -52,7 +52,8 @@ class ScriptManager {
 
 			if (this.scriptAction == 4) {
 				player.go.setFrame(1);
-				player.scriptMessage("*Yawns* Hmm?", 300);			}
+				player.scriptMessage("*Yawns* Hmm?", 300);
+			}
 
 			if (this.scriptAction == 5) {
 				mom.scriptMove(12, 11, 4, 0, true);
@@ -69,7 +70,7 @@ class ScriptManager {
 
 			if (this.scriptAction == 8) {
 				player.scriptJump();
-				player.scriptMessage("Uh, eggs? I thought we had plenty.", 300);
+				player.scriptMessage("Uh, eggs? I thought we had plenty.", 500);
 			}
 
 			if (this.scriptAction == 9) {
@@ -224,6 +225,89 @@ class ScriptManager {
 					delay: 500,
 					callback: () => {
 						player.go.setFrame(0);
+						this.scene.state = "play";
+						this.scriptAction = -1;
+					}
+				});
+			}
+		}
+
+		if (this.script == "HitForest" && this.updateScriptAction) {
+
+			let player = this.scene.player;
+
+			if (this.scriptAction == 0) {
+				this.scene.cameras.main.stopFollow();
+				this.scene.tweens.add({
+					targets: this.scene.cameras.main,
+					scrollX: this.scene.cameras.main.scrollX + 40 * 7,
+					ease: "Quad.easeOut",
+					duration: 2700,
+					onComplete: () => {
+						this.updateScript();
+					}
+				});
+			}
+
+			if (this.scriptAction == 1) {
+				player.scriptMessage(["What kind of creatures could be in there? I've never seen anything.", ". . .", "Do I hear . . . music?", "No, I must be hearing things. I should go get those eggs."]);
+			}
+			
+			if (this.scriptAction == 2) {
+				this.scene.tweens.add({
+					targets: this.scene.cameras.main,
+					scrollX: this.scene.cameras.main.scrollX - 40 * 6,
+					ease: "Linear",
+					duration: 2000,
+					onComplete: () => {
+						this.scene.cameras.main.startFollow(player.go, true);
+						this.scene.state = "play";
+						this.scriptAction = -1;
+					}
+				});
+			}
+		}
+
+		if (this.script == "HitPassStoreTrigger" && this.updateScriptAction) {
+			let player = this.scene.player;
+
+			if (this.scriptAction == 0) {
+				player.scriptMessage("Wait, what's that?");
+			}
+
+			if (this.scriptAction == 1) {
+				player.scriptMove(player.tilePos.x - 2, player.tilePos.y, 2 / 1.5, 200);
+			}
+
+			if (this.scriptAction == 2) {
+				player.scriptMove(player.tilePos.x, 7, (player.tilePos.y - 7) / 1.5, 0).setCallback("onComplete", () => {
+					player.go.setFrame(2);
+					this.updateScript();
+				}, [], this);
+			}
+
+			if (this.scriptAction == 3) {
+				player.scriptMessage(["Wow. That outfit looks perfect!", "I want it!"], 0);
+			}
+
+			if (this.scriptAction == 4) {
+				player.scriptMove(player.tilePos.x - 3, 7, 3 / 1.5, 0);
+			}
+			
+			if (this.scriptAction == 5) {
+				player.go.setFrame(2);
+				player.scriptMessage("Wait. I can't. Mom will be upset with me.", 500);
+			}
+
+			if (this.scriptAction == 6) {
+				player.go.setFrame(0);
+				player.scriptMessage("I should just get her those eggs.", 300);
+			}
+
+			if (this.scriptAction == 7) {
+				this.scene.time.addEvent({
+					delay: 200,
+					callback: () => {
 						this.scene.state = "play";
 						this.scriptAction = -1;
 					}

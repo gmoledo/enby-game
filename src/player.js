@@ -17,12 +17,13 @@ class Player {
 		this.go.body.setSize(this.go.width * 2/3, this.go.height / 2 * 2/3, false);
 		this.go.body.setOffset(this.go.width * 1/6, this.go.height / 2 + this.go.height / 2 * 1/6);
 
-		// Tween for moving player
+		// Tween variables for moving player
 		this.startPos = new Phaser.Math.Vector2(0, 0);
 		this.targetPos = new Phaser.Math.Vector2(0, 0);
 		this.walkSpeed = 250;
 		this.walkMultiplier = 1;
 
+		// Player animations
 		this.frameRate = 4;
 		var walkDownConfig = {
 			key: "walkDown",
@@ -58,24 +59,18 @@ class Player {
 		this.go.anims.load("walkRight");
 		this.go.anims.load("walkUp");
 
-		var outOfBedConfig = {
-			key: "outOfBed",
-			frames: this.scene.anims.generateFrameNumbers("playerBase", {frames: [1, 2, 3, 0]}),
-			frameRate: 4,
-			repeat: 1,
-			onComplete: () => {this.go.anims.currentAnim = this.walkLeftAnim;},
-			onCompleteScope: this
-		}
-		this.outOfBedAnim = this.scene.anims.create(outOfBedConfig);
-		this.go.anims.load("outOfBed");
-
 		this.go.anims.currentAnim = null;
 
 
 		this.name = "Player";
 
+
+		// Player narrative flags
+		this.mirrorFlag = false;
 		this.exitHouseFlag = false;
+		this.hitForestFlag = false;
 		this.forestBoundFlag = false;
+		this.passStoreFlag = false;
 	}
 
 	update(dt) {
@@ -111,8 +106,16 @@ class Player {
 		 		}
 			}
 
-			if (this.scene.mirrorTrigger) {
+			if (!this.mirrorFlag) {
 				if (this.scene.physics.world.overlap(this.go, this.scene.mirrorTrigger.go, this.hitMirrorTrigger, () => true, this)) {
+					moveX = 0;
+					moveY = 0;
+				}
+			}
+
+			if (!this.passStoreFlag) {
+		 		let storeGOs = this.scene.storeTriggers.map((trigger) => trigger.go);
+				if (this.scene.physics.world.overlap(this.go, storeGOs, this.hitStoreTrigger, () => !this.passStoreFlag, this)) {
 					moveX = 0;
 					moveY = 0;
 				}
@@ -181,14 +184,15 @@ class Player {
 				this.go.currentAnim = this.walkUpAnim;
 			}
 
-			let nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
-			if (!nextTile || nextTile.properties.Collision) {
-				moveX = 0;
-				moveY = 0;
-			}
 
-			if (this.scene.forestBounds && this.scene.mapManager.currentMap == this.scene.mapManager.houseMap) {
-				if (!this.forestBoundFlag) {
+			if (this.scene.mapManager.currentMap == this.scene.mapManager.houseMap) {
+				if (this.tilePos.x + moveX == this.scene.door.tilePos.x && this.tilePos.y + moveY == this.scene.door.tilePos.y) {
+					this.hitDoorTrigger();
+					moveX = 0;
+					moveY = 0;
+				}
+
+				if (!this.scene.forestBoundFlag) {
 					for (let i = 0; i < this.scene.forestBounds.length; i++) {
 						let bound = this.scene.forestBounds[i];
 
@@ -200,6 +204,14 @@ class Player {
 					}
 				}
 			}
+
+			
+			let nextTile = this.scene.mapManager.currentMap.getTileAt(this.tilePos.x + moveX, this.tilePos.y + moveY);
+			if (!nextTile || nextTile.properties.Collision) {
+				moveX = 0;
+				moveY = 0;
+			}
+
 
 			if (moveX == 0 && moveY == 0) {
 				if (this.go.anims.isPlaying) {
@@ -273,7 +285,7 @@ class Player {
 
 	// When landing on egg, destroy egg and queue next egg message, pausing scene
 	hitMirrorTrigger(player, mirror) {
-		this.scene.mirrorTrigger.go.destroy();
+		this.mirrorFlag = true;
 		this.pauseAnimation();
 		this.scene.mirrorPlayer.pauseAnimation();
 
@@ -303,12 +315,30 @@ class Player {
 		}
 	}
 
-	hitForestTrigger(player, bound) {
-		this.UIScene.dialogueManager.queueMessages(this.name, Trigger.boundMessage);
+	hitDoorTrigger(player, door) {
+		this.UIScene.dialogueManager.queueMessages("Mom", Trigger.doorMessage);
 		this.scene.state = "pause";
 	}
 
+	hitForestTrigger(player, bound) {
+		if (!this.hitForestFlag) {
+			this.hitForestFlag = true;
+			this.scene.state = "script";
+			this.scene.scriptManager.script = "HitForest";
+			this.scene.scriptManager.updateScript();
+		}
+		else {
+			this.UIScene.dialogueManager.queueMessages("Player", Trigger.boundMessage);
+			this.scene.state = "pause";
+		}
+	}
 
+	hitStoreTrigger(player, trigger) {
+		this.passStoreFlag = true;
+		this.scene.state = "script";
+		this.scene.scriptManager.script = "HitPassStoreTrigger";
+		this.scene.scriptManager.updateScript();
+	}
 
 	// Handles how the character moves during scripted motion
 	scriptMove(tileX, tileY, duration, delay, update) {

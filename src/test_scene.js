@@ -86,9 +86,8 @@ class TestScene extends Phaser.Scene {
 
 		this.scriptManager = new ScriptManager(this);
 
-
-		// Class for handling tilemap and grid-related structures and logic
 		this.mapManager = new MapManager(this);
+
 
 		this.mirrorTrigger = new Trigger(this, "mirrorTrigger", 12, 15);
 		
@@ -103,7 +102,14 @@ class TestScene extends Phaser.Scene {
 
 		this.forestBounds = [];
 		for (let i = 0; i < this.mapManager.houseMap.height; i++) {
-			this.forestBounds.push(new Trigger(this, "forestBound", 35, i));
+			this.forestBounds.push(new Trigger(this, "forestBound", 32, i));
+		}
+
+		this.door = new Trigger(this, "door", 17, 7);
+
+		this.storeTriggers = [];
+		for (let i = 0; i < this.mapManager.houseMap.height - 7; i++) {
+			this.storeTriggers.push(new Trigger(this, "storeTrigger", 49, i + 7));
 		}
 
 		// Player Class
@@ -135,7 +141,6 @@ class TestScene extends Phaser.Scene {
 		this.children.sendToBack(this.white);
 
 		// Optional intro sequence for demonstration purposes
-		this.state = "script";
 		this.sceneLoaded = true;
 	}
 
@@ -162,10 +167,15 @@ class TestScene extends Phaser.Scene {
 	}
 
 	startGame() {
+		// this.state = "play";
+		// this.mapManager.changeMap({Map: "Town"});
+		// this.player.goto(55, 11);
+
+		this.state = "script";
+		this.scriptManager.script = "Intro";
 		this.time.addEvent({
 			delay: 1000,
 			callback: () => {
-				this.scriptManager.script = "Intro";
 				this.scriptManager.updateScript();
 			}
 		});
