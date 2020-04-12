@@ -200,18 +200,18 @@ class TestScene extends Phaser.Scene {
 	}
 
 	startGame() {
-		this.state = "play";
-		this.mapManager.changeMap({Map: "Town"});
-		this.player.goto(45, 11);
-		this.player.passStoreFlag = true;
+		// this.state = "play";
+		// this.mapManager.changeMap({Map: "Town"});
+		// this.player.goto(45, 11);
+		// this.player.passStoreFlag = true;
 
-		// this.state = "script";
-		// this.scriptManager.script = "EnterHome";
-		// this.time.addEvent({
-		// 	delay: 1000,
-		// 	callback: () => {
-		// 		this.scriptManager.updateScript();
-		// 	}
-		// });
+		this.state = "script";
+		this.scriptManager.script = "Intro";
+		this.time.addEvent({
+			delay: 1000,
+			callback: () => {
+				this.scriptManager.updateScript();
+			}
+		});
 	}
 }

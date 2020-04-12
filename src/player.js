@@ -20,11 +20,11 @@ class Player {
 		// Tween variables for moving player
 		this.startPos = new Phaser.Math.Vector2(0, 0);
 		this.targetPos = new Phaser.Math.Vector2(0, 0);
-		this.walkSpeed = 250;
+		this.walkSpeed = 166;
 		this.walkMultiplier = 1;
 
 		// Player animations
-		this.frameRate = 4;
+		this.frameRate = 6;
 		var walkDownConfig = {
 			key: "walkDown",
 			frames: this.scene.anims.generateFrameNumbers("playerBase", {frames: [4, 8, 12, 0]}),
