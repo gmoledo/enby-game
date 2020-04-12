@@ -26,7 +26,7 @@ class UIScene extends Phaser.Scene {
 		this.inputManager = this.TestScene.inputManager;
 
 		this.black = this.add.sprite(0, 0, "black");
-		this.black.setVisible(true);
+		this.black.setVisible(false);
 		this.black.setOrigin(0, 0);
 		this.black.setScale(10);
 

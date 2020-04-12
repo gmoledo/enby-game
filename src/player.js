@@ -71,6 +71,7 @@ class Player {
 		this.hitForestFlag = false;
 		this.forestBoundFlag = false;
 		this.passStoreFlag = false;
+		this.goInStoreFlag = false;
 	}
 
 	update(dt) {
@@ -113,9 +114,9 @@ class Player {
 				}
 			}
 
-			if (!this.passStoreFlag) {
+			if (!this.goInStoreFlag) {
 		 		let storeGOs = this.scene.storeTriggers.map((trigger) => trigger.go);
-				if (this.scene.physics.world.overlap(this.go, storeGOs, this.hitStoreTrigger, () => !this.passStoreFlag, this)) {
+				if (this.scene.physics.world.overlap(this.go, storeGOs, this.hitStoreTrigger, () => true, this)) {
 					moveX = 0;
 					moveY = 0;
 				}
@@ -316,8 +317,15 @@ class Player {
 	}
 
 	hitDoorTrigger(player, door) {
-		this.UIScene.dialogueManager.queueMessages("Mom", Trigger.doorMessage);
-		this.scene.state = "pause";
+		if (!this.goInStoreFlag) {
+			this.UIScene.dialogueManager.queueMessages("Mom", Trigger.doorMessage);
+			this.scene.state = "pause";
+		}
+		else {
+			this.scene.state = "script";
+			this.scene.scriptManager.script = "EnterHome";
+			this.scene.scriptManager.updateScript();
+		}
 	}
 
 	hitForestTrigger(player, bound) {
@@ -334,30 +342,43 @@ class Player {
 	}
 
 	hitStoreTrigger(player, trigger) {
-		this.passStoreFlag = true;
-		this.scene.state = "script";
-		this.scene.scriptManager.script = "HitPassStoreTrigger";
-		this.scene.scriptManager.updateScript();
+		if (!this.passStoreFlag) {
+			this.passStoreFlag = true;
+			this.scene.state = "script";
+			this.scene.scriptManager.script = "HitPassStoreTrigger";
+			this.scene.scriptManager.updateScript();
+		}
+		else {
+			this.goInStoreFlag = true;
+			this.scene.state = "script";
+			this.scene.scriptManager.script = "HitGoInStoreTrigger";
+			this.scene.scriptManager.updateScript();
+		}
+
 	}
 
 	// Handles how the character moves during scripted motion
-	scriptMove(tileX, tileY, duration, delay, update) {
+	scriptMove(tileX, tileY, duration, delay, update, backwards) {
 		if (update === undefined) {
 			update = true;
 		}
 
 		// Change character's sprite depending on direction of movement
 		if (tileX - this.tilePos.x < 0) {
-			this.go.currentAnim = this.walkLeftAnim;
+			if (backwards) 	this.go.currentAnim = this.walkRightAnim;
+			else			this.go.currentAnim = this.walkLeftAnim;
 		}
 		if (tileX - this.tilePos.x > 0) {
-			this.go.currentAnim = this.walkRightAnim;
+			if (backwards) 	this.go.currentAnim = this.walkLeftAnim;
+			else			this.go.currentAnim = this.walkRightAnim;
 		}
 		if (tileY - this.tilePos.y < 0) {
-			this.go.currentAnim = this.walkUpAnim;
+			if (backwards) 	this.go.currentAnim = this.walkDownAnim;
+			else			this.go.currentAnim = this.walkUpAnim;
 		}
 		if (tileY - this.tilePos.y > 0) {
-			this.go.currentAnim = this.walkDownAnim;
+			if (backwards) 	this.go.currentAnim = this.walkUpAnim;
+			else			this.go.currentAnim = this.walkDownAnim;
 		}
 
 		this.tilePos.x = tileX;

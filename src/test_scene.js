@@ -1,6 +1,6 @@
 class TestScene extends Phaser.Scene {
 	constructor() {
-		super({key: "TestScene", active: true});
+		super({key: "TestScene", active: false});
 
 		// States for changing game behavior
 		this.states = ["play", "pause", "script"];
@@ -69,12 +69,21 @@ class TestScene extends Phaser.Scene {
 		this.load.image("white", "assets/white.png");
 		this.load.image("mirror", "assets/mirror.png");
 
+		this.load.image("jacket", "assets/jacket.png");
+		this.load.image("pants", "assets/pants.png");
+		this.load.image("skirt", "assets/skirt.png");
+		this.load.image("cardigan", "assets/cardigan.png");
+
 		this.load.image("tiles", "Tiled_data/Tileset.png");
 		this.load.tilemapTiledJSON("houseMap", "Tiled_data/HouseMap.json");
 		this.load.tilemapTiledJSON("townMap", "Tiled_data/TownMap.json");
 		this.load.tilemapTiledJSON("forestMap", "Tiled_data/ForestMap.json");
 		this.load.tilemapTiledJSON("roomMap", "Tiled_data/RoomMap.json")
 		this.load.tilemapTiledJSON("havenMap", "Tiled_data/HavenMap.json");
+
+		this.load.spritesheet("player", "assets/player_options.png", {frameWidth: 40, frameHeight: 80});
+		this.load.spritesheet("clothing", "assets/clothing_options.png", {frameWidth: 40, frameHeight: 40});
+				this.load.image("cursor", "assets/cursor.png");
 	}
 
 	create() {
@@ -87,6 +96,8 @@ class TestScene extends Phaser.Scene {
 		this.scriptManager = new ScriptManager(this);
 
 		this.mapManager = new MapManager(this);
+
+
 
 
 		this.mirrorTrigger = new Trigger(this, "mirrorTrigger", 12, 15);
@@ -112,6 +123,28 @@ class TestScene extends Phaser.Scene {
 			this.storeTriggers.push(new Trigger(this, "storeTrigger", 49, i + 7));
 		}
 
+
+
+
+
+		this.jacket = this.add.sprite(	46.5 * 40 + this.mapManager.townLayer.x,
+										4.72 * 40 + this.mapManager.townLayer.y,
+										"jacket");
+		this.pants = this.add.sprite(	46.5 * 40 + this.mapManager.townLayer.x,
+										5.4 * 40 + this.mapManager.townLayer.y,
+										"pants");
+
+		this.cardigan = this.add.sprite(48.5 * 40 + this.mapManager.townLayer.x,
+										4.9 * 40 + this.mapManager.townLayer.y,
+										"cardigan");		
+		this.skirt = this.add.sprite( 	48.5 * 40 + this.mapManager.townLayer.x,
+										5.4 * 40 + this.mapManager.townLayer.y,
+										"skirt");
+
+
+
+
+
 		// Player Class
 		this.player = new Player(this);
 
@@ -124,7 +157,7 @@ class TestScene extends Phaser.Scene {
 
 		this.mirror = this.add.sprite(	11 * this.mapManager.roomMap.tileWidth + this.mapManager.roomLayer.x,
 										13 * this.mapManager.roomMap.tileHeight + this.mapManager.roomLayer.y,
-										"mirror")
+										"mirror");
 		this.mirror.setOrigin(0, 0);
 
 		this.mirrorPlayer = new MirrorPlayer(this);
@@ -167,17 +200,18 @@ class TestScene extends Phaser.Scene {
 	}
 
 	startGame() {
-		// this.state = "play";
-		// this.mapManager.changeMap({Map: "Town"});
-		// this.player.goto(55, 11);
+		this.state = "play";
+		this.mapManager.changeMap({Map: "Town"});
+		this.player.goto(45, 11);
+		this.player.passStoreFlag = true;
 
-		this.state = "script";
-		this.scriptManager.script = "Intro";
-		this.time.addEvent({
-			delay: 1000,
-			callback: () => {
-				this.scriptManager.updateScript();
-			}
-		});
+		// this.state = "script";
+		// this.scriptManager.script = "EnterHome";
+		// this.time.addEvent({
+		// 	delay: 1000,
+		// 	callback: () => {
+		// 		this.scriptManager.updateScript();
+		// 	}
+		// });
 	}
 }

@@ -11,7 +11,7 @@ var config = {
 		height: 720,
 		autoCenter: Phaser.Scale.Center.CENTER_BOTH
 	},
-	scene: [TestScene, UIScene],
+	scene: [TestScene, UIScene, StoreScene],
 	physics: {
 		default: "arcade",
 		arcade: {

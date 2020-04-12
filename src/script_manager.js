@@ -315,6 +315,77 @@ class ScriptManager {
 			}
 		}
 
+		if (this.script == "HitGoInStoreTrigger" && this.updateScriptAction) {
+			let player = this.scene.player;
+			
+			if (this.scriptAction == 0) {
+				player.scriptMessage(". . .", 1000);
+			}
+
+			if (this.scriptAction == 1) {
+				player.scriptMove(player.tilePos.x - 2, player.tilePos.y, 2, 0).setCallback("onComplete", () => {
+					player.go.setFrame(2);
+					this.updateScript();
+				}, [], this);
+			}
+
+			if (this.scriptAction == 2) {
+				player.scriptMove(player.tilePos.x - 3, player.tilePos.y, 3 / 1.5, 1000);
+			}
+
+			if (this.scriptAction == 3) {
+				player.scriptMove(player.tilePos.x, 6, (player.tilePos.y - 6) / 1.5, 0);
+			}
+
+			if (this.scriptAction == 4) {
+				this.scene.state = "play";
+				this.scriptAction = -1;
+				this.scene.scene.switch("StoreScene");
+			}
+		}
+
+		if (this.script == "ExitStore" && this.updateScriptAction) {
+			let player = this.scene.player;
+
+			if (this.scriptAction == 0) {
+				player.scriptMove(player.tilePos.x, player.tilePos.y + 1, 1, 300);
+			}
+
+			if (this.scriptAction == 1) {
+				this.scene.state = "play";
+				this.scriptAction = -1;
+			}
+		}
+
+		if (this.script == "EnterHome" && this.updateScriptAction) {
+			let player = this.scene.player;
+			let mom = this.scene.mom;
+
+			if (this.scriptAction == 0) {
+				this.scene.mapManager.changeMap({Map: "House"});
+
+				mom.goto(17, 7);
+				mom.go.setVisible(true);
+				mom.go.setFrame(0);
+
+				player.goto(17, 8);
+				player.go.setFrame(2);
+				this.scene.children.bringToTop(player.go);
+
+				this.scene.time.addEvent({
+					delay: 200,
+					callback: () => {
+						player.scriptMove(player.tilePos.x, player.tilePos.y + 2, 1, 0, true, true);
+						mom.scriptMove(mom.tilePos.x, mom.tilePos.y + 1, 0.75, 0, false);
+					}
+				});
+			}
+
+			if (this.scriptAction == 1) {
+				mom.scriptMessage("What are you wearing?")
+			}
+		}
+
 		this.updateScriptAction = false;
 	}
 }
