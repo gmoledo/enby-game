@@ -63,6 +63,7 @@ class TestScene extends Phaser.Scene {
 	preload() {
 		this.load.spritesheet("playerBase", "assets/player_base.png", { frameWidth: 40, frameHeight: 80 });
 		this.load.spritesheet("playerJacket", "assets/player_jacket.png", { frameWidth: 40, frameHeight: 80 });
+		this.load.spritesheet("momBase", "assets/mom_base.png", { frameWidth: 40, frameHeight: 80} );
 		this.load.image("egg", "assets/egg.png");
 
 		this.load.image("trigger", "assets/trigger.png");
@@ -70,7 +71,7 @@ class TestScene extends Phaser.Scene {
 		this.load.image("mirror", "assets/mirror.png");
 		this.load.image("bed", "assets/bed.png");
 		this.load.image("blanket", "assets/blanket.png");
-		
+
 		this.load.image("jacket", "assets/jacket.png");
 		this.load.image("pants", "assets/pants.png");
 		this.load.image("skirt", "assets/skirt.png");
@@ -183,9 +184,6 @@ class TestScene extends Phaser.Scene {
 		this.mirrorPlayer = new MirrorPlayer(this);
 		this.mirrorPlayer.goto(20, 3);
 		this.children.sendToBack(this.mirrorPlayer.go);
-
-		this.mirrorMom = new Mom(this);
-		this.children.sendToBack(this.mirrorMom.go);
 
 		this.white = this.add.sprite(0, 0, "white");
 		this.white.setVisible(true);

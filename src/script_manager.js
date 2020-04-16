@@ -16,7 +16,6 @@ class ScriptManager {
 		if (this.script == "Intro" && this.updateScriptAction) {
 
 			let mom = this.scene.mom;
-			let mirrorMom = this.scene.mirrorMom;
 			let player = this.scene.player;
 
 
@@ -38,15 +37,13 @@ class ScriptManager {
 			if (this.scriptAction == 2) 
 			{
 				mom.goto(12, 17);
-				mirrorMom.goto(11, 17);
 
 				mom.go.setVisible(true);
 				mom.go.setFrame(2);
 
 				//this.scene.sound.play("door_open");
 
-				mom.scriptMove(12, 15, 2, 500, true);
-				mirrorMom.scriptMove(11, 15, 2, 500, false);
+				mom.scriptMove(12, 15, 4, 500, true);
 			}
 
 			if (this.scriptAction == 3) {
@@ -59,12 +56,11 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 5) {
-				mom.scriptMove(12, 11, 4, 0, true);
-				mirrorMom.scriptMove(11, 11, 4, 0, false);
+				mom.scriptMove(12, 11, 8, 0, true);
 			}
 
 			if (this.scriptAction == 6) {
-				mom.scriptMove(15, 11, 3, 0, true);
+				mom.scriptMove(15, 11, 6, 0, true);
 			}
 
 			if (this.scriptAction == 7) {
@@ -106,13 +102,11 @@ class ScriptManager {
 
 			if (this.scriptAction == 16) 
 			{
-				mom.scriptMove(12, 11, 3, 0, true);
+				mom.scriptMove(12, 11, 6, 0, true);
 			}
 				
 			if (this.scriptAction == 17) {
-				mom.scriptMove(12, 18, 7, 0, true);
-				mirrorMom.goto(11, 11);
-				mirrorMom.scriptMove(11, 18, 7, 0, false);
+				mom.scriptMove(12, 18, 14, 0, true);
 			}
 
 			if (this.scriptAction == 18) {

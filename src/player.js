@@ -273,10 +273,10 @@ class Player {
 
 	pauseAnimation() {
 		let frame = -1;
-		if (this.go.currentAnim.key == "walkUp") frame = 2;
-		if (this.go.currentAnim.key == "walkDown") frame = 0;
-		if (this.go.currentAnim.key == "walkLeft") frame = 1;
-		if (this.go.currentAnim.key == "walkRight") frame = 3;
+		if (this.go.currentAnim.key == (this.name == "Mom" ? "walkUpMom" : "walkUp")) frame = 2;
+		if (this.go.currentAnim.key == (this.name == "Mom" ? "walkDownMom" : "walkDown")) frame = 0;
+		if (this.go.currentAnim.key == (this.name == "Mom" ? "walkLeftMom" : "walkLeft")) frame = 1;
+		if (this.go.currentAnim.key == (this.name == "Mom" ? "walkRightMom" : "walkRight")) frame = 3;
 
 		this.go.setFrame(frame);
 		this.go.anims.stop();
