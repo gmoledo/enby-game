@@ -9,16 +9,16 @@ class MirrorPlayer extends Player {
 		
 		// Set movement depending on input
 		if (this.scene.inputManager.input == "left") {
-			moveX = 1;
-		}
-		if (this.scene.inputManager.input == "right") {
 			moveX = -1;
 		}
+		if (this.scene.inputManager.input == "right") {
+			moveX = 1;
+		}
 		if (this.scene.inputManager.input == "up") {
-			moveY = -1;
+			moveY = 1;
 		}
 		if (this.scene.inputManager.input == "down") {
-			moveY = 1;
+			moveY = -1;
 		}
 
 		// If moving player reaches destination...

@@ -69,7 +69,7 @@ class Player {
 		this.mirrorFlag = false;
 		this.exitHouseFlag = false;
 		this.hitForestFlag = false;
-		this.forestBoundFlag = false;
+		this.gotEggsFlag = false;
 		this.passStoreFlag = false;
 		this.goInStoreFlag = false;
 	}
@@ -193,15 +193,13 @@ class Player {
 					moveY = 0;
 				}
 
-				if (!this.scene.forestBoundFlag) {
-					for (let i = 0; i < this.scene.forestBounds.length; i++) {
-						let bound = this.scene.forestBounds[i];
+				for (let i = 0; i < this.scene.forestBounds.length; i++) {
+					let bound = this.scene.forestBounds[i];
 
-						if (this.tilePos.x + moveX == bound.tilePos.x && this.tilePos.y + moveY == bound.tilePos.y) {
-							this.hitForestTrigger();
-							moveX = 0;
-							moveY = 0;
-						}
+					if (this.tilePos.x + moveX == bound.tilePos.x && this.tilePos.y + moveY == bound.tilePos.y) {
+						this.hitForestTrigger();
+						moveX = 0;
+						moveY = 0;
 					}
 				}
 			}
@@ -290,21 +288,9 @@ class Player {
 		this.pauseAnimation();
 		this.scene.mirrorPlayer.pauseAnimation();
 
-		this.scene.state = "pause";
-
-		this.scene.time.addEvent({
-			delay: 1000,
-			callback: () => {
-				this.scene.player.go.setFrame(1);
-				this.scene.mirrorPlayer.go.setFrame(3);
-				this.scene.time.addEvent({
-					delay: 500,
-					callback: () => {
-						this.UIScene.dialogueManager.queueMessages(this.name, Trigger.mirrorMessage);
-					}
-				});
-			}
-		});
+		this.scene.state = "script";
+		this.scene.scriptManager.script = "LookInMirror";
+		this.scene.scriptManager.updateScript();
 	}
 
 	hitEggTrigger (player, egg) {
@@ -312,7 +298,7 @@ class Player {
 		this.UIScene.dialogueManager.queueMessages(this.name, Trigger.eggMessages[Trigger.eggMessageIndex++]);
 		this.scene.state = "pause";
 		if (Trigger.eggMessageIndex == Trigger.eggMessages.length) {
-			this.forestBoundFlag = true;
+			this.gotEggsFlag = true;
 		}
 	}
 
@@ -348,13 +334,12 @@ class Player {
 			this.scene.scriptManager.script = "HitPassStoreTrigger";
 			this.scene.scriptManager.updateScript();
 		}
-		else {
+		if (this.gotEggsFlag && ! this.goInStoreFlag) {
 			this.goInStoreFlag = true;
 			this.scene.state = "script";
 			this.scene.scriptManager.script = "HitGoInStoreTrigger";
 			this.scene.scriptManager.updateScript();
 		}
-
 	}
 
 	// Handles how the character moves during scripted motion

@@ -27,7 +27,8 @@ class ScriptManager {
 				player.go.setFrame(2);
 				mom.go.setVisible(false);
 
-				mom.scriptMessage("Knock, knock! Time to wake up sweetie!", 0);
+				//this.scene.sound.play("door_knock");
+				mom.scriptMessage("Knock, knock! Time to wake up sweetie!", 1100);
 			}
 
 			if (this.scriptAction == 1) {
@@ -41,6 +42,8 @@ class ScriptManager {
 
 				mom.go.setVisible(true);
 				mom.go.setFrame(2);
+
+				//this.scene.sound.play("door_open");
 
 				mom.scriptMove(12, 15, 2, 500, true);
 				mirrorMom.scriptMove(11, 15, 2, 500, false);
@@ -74,7 +77,7 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 9) {
-				mom.scriptMessage("Not plenty enough! I'm making something special and I'm gonna need about a half-dozen more.", 0);
+				mom.scriptMessage("Not plenty enough! I'm making something special and I'll need a half-dozen more.", 0);
 			}
 
 			if (this.scriptAction == 10) {
@@ -90,15 +93,15 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 13) {
-				mom.scriptMessage("Is something the matter, sweetie?");
+				mom.scriptMessage("Sweetie, is something wrong?");
 			}
 
 			if (this.scriptAction == 14) {
-				player.scriptMessage("No. Nothing.");
+				player.scriptMessage("No. Nothing's wrong.");
 			}
 
 			if (this.scriptAction == 15) {
-				mom.scriptMessage("Good. Then I'll see you soon!");
+				mom.scriptMessage("You're sure?");
 			}
 
 			if (this.scriptAction == 16) 
@@ -113,8 +116,9 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 18) {
+				//this.scene.sound.play("door_close");
 				mom.go.setVisible(false);
-				player.scriptMessage("*Sigh*", 0);
+				player.scriptMessage("*Sigh*", 1000);
 			}
 
 			if (this.scriptAction == 19) {
@@ -124,6 +128,34 @@ class ScriptManager {
 			if (this.scriptAction == 20) {
 				this.scene.state = "play";
 				this.scriptAction = -1;
+			}
+		}
+
+		if (this.script == "LookInMirror" && this.updateScriptAction) {
+			let player = this.scene.player;
+			let mirrorPlayer = this.scene.mirrorPlayer;
+
+			if (this.scriptAction == 0) {
+				this.scene.time.addEvent({
+					delay: 1000,
+					callback: () => {
+						player.go.setFrame(1);
+						mirrorPlayer.go.setFrame(3);
+						player.scriptMessage(Trigger.mirrorMessage, 500);
+					}
+				});
+			}
+
+			if (this.scriptAction == 1) {
+				this.scene.time.addEvent({
+					delay: 500,
+					callback: () => {
+						player.go.setFrame(0);
+						mirrorPlayer.go.setFrame(0);
+						this.scene.state = "play";
+						this.scriptAction = -1;
+					}
+				});
 			}
 		}
 

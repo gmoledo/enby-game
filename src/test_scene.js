@@ -68,7 +68,9 @@ class TestScene extends Phaser.Scene {
 		this.load.image("trigger", "assets/trigger.png");
 		this.load.image("white", "assets/white.png");
 		this.load.image("mirror", "assets/mirror.png");
-
+		this.load.image("bed", "assets/bed.png");
+		this.load.image("blanket", "assets/blanket.png");
+		
 		this.load.image("jacket", "assets/jacket.png");
 		this.load.image("pants", "assets/pants.png");
 		this.load.image("skirt", "assets/skirt.png");
@@ -83,7 +85,13 @@ class TestScene extends Phaser.Scene {
 
 		this.load.spritesheet("player", "assets/player_options.png", {frameWidth: 40, frameHeight: 80});
 		this.load.spritesheet("clothing", "assets/clothing_options.png", {frameWidth: 40, frameHeight: 40});
-				this.load.image("cursor", "assets/cursor.png");
+		this.load.image("cursor", "assets/cursor.png");
+
+		this.load.audio("door_knock", "assets/audio/Door_Knock.ogg");
+		this.load.audio("door_open", "assets/audio/Door_Open.ogg");
+		this.load.audio("door_close", "assets/audio/Door_Close.ogg");
+		this.load.audio("music_box_intro", "assets/audio/Music Box.mp3");
+		this.load.audio("music_box_main", "assets/audio/Music_Box.mp3");
 	}
 
 	create() {
@@ -142,7 +150,15 @@ class TestScene extends Phaser.Scene {
 										"skirt");
 
 
+		this.mirror = this.add.sprite(	19 * this.mapManager.roomMap.tileWidth + this.mapManager.roomLayer.x,
+										5 * this.mapManager.roomMap.tileHeight + this.mapManager.roomLayer.y,
+										"mirror");
+		this.mirror.setOrigin(0, 1);
 
+		this.bed = this.add.sprite( 21 * 40 + this.mapManager.roomLayer.x,
+									3 * 40 + this.mapManager.roomLayer.y,
+									"bed");
+		this.bed.setOrigin(0, 0);
 
 
 		// Player Class
@@ -150,18 +166,22 @@ class TestScene extends Phaser.Scene {
 
 		this.mom = new Mom(this);
 
+
+		this.blanket = this.add.sprite( 21 * 40 + this.mapManager.roomLayer.x,
+										3 * 40 + this.mapManager.roomLayer.y,
+										"blanket");
+		this.blanket.setOrigin(0, 0);
+
+
 		// Camera Class
 		this.camera = new Camera(this);
 
 		this.cameras.main.setRenderToTexture(this.customPipeline);
 
-		this.mirror = this.add.sprite(	11 * this.mapManager.roomMap.tileWidth + this.mapManager.roomLayer.x,
-										13 * this.mapManager.roomMap.tileHeight + this.mapManager.roomLayer.y,
-										"mirror");
-		this.mirror.setOrigin(0, 0);
+
 
 		this.mirrorPlayer = new MirrorPlayer(this);
-		this.mirrorPlayer.goto(3, 5);
+		this.mirrorPlayer.goto(20, 3);
 		this.children.sendToBack(this.mirrorPlayer.go);
 
 		this.mirrorMom = new Mom(this);
@@ -207,11 +227,6 @@ class TestScene extends Phaser.Scene {
 
 		this.state = "script";
 		this.scriptManager.script = "Intro";
-		this.time.addEvent({
-			delay: 1000,
-			callback: () => {
-				this.scriptManager.updateScript();
-			}
-		});
+		this.scriptManager.updateScript();
 	}
 }
