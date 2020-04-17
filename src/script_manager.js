@@ -81,23 +81,27 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 11) {
+				mom.scriptMove(16, 10, 1, 0, false);
 				mom.scriptMessage("You don't have to go. Just like I don't have to put a roof over your head and cook special meals for you!");
 			}
 
 			if (this.scriptAction == 12) {
+				player.go.setFrame(1);
 				player.scriptMessage(". . .");
 			}
 
 			if (this.scriptAction == 13) {
+				mom.scriptMove(15, 10, 1, 0, false, true);
 				mom.scriptMessage("Sweetie, is something the matter?");
 			}
 
 			if (this.scriptAction == 14) {
+				player.go.setFrame(0);
 				player.scriptMessage("No, mom.");
 			}
 
 			if (this.scriptAction == 15) {
-				mom.scriptMessage("Okay then. I'll see you soon honey.");
+				mom.scriptMessage("Okay. Then I'll see you soon honey.");
 			}
 
 			if (this.scriptAction == 16) 
@@ -112,6 +116,7 @@ class ScriptManager {
 			if (this.scriptAction == 18) {
 				//this.scene.sound.play("door_close");
 				mom.go.setVisible(false);
+				mom.goto(0, 0);
 				player.scriptMessage("*Sigh*", 1000);
 			}
 
@@ -120,36 +125,20 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 20) {
+				player.scriptMove(player.tilePos.x - 1, player.tilePos.y, 2, 200, true);
+			}
+
+			if (this.scriptAction == 21) {
+				player.scriptMove(player.tilePos.x, player.tilePos.y - 1, 2, 0, true);
+			}
+
+			if (this.scriptAction == 22) {
+				player.scriptMessage(". . .");
+			}
+
+			if (this.scriptAction == 23) {
 				this.scene.state = "play";
 				this.scriptAction = -1;
-			}
-		}
-
-		if (this.script == "LookInMirror" && this.updateScriptAction) {
-			let player = this.scene.player;
-			let mirrorPlayer = this.scene.mirrorPlayer;
-
-			if (this.scriptAction == 0) {
-				this.scene.time.addEvent({
-					delay: 1000,
-					callback: () => {
-						player.go.setFrame(1);
-						mirrorPlayer.go.setFrame(3);
-						player.scriptMessage(Trigger.mirrorMessage, 500);
-					}
-				});
-			}
-
-			if (this.scriptAction == 1) {
-				this.scene.time.addEvent({
-					delay: 500,
-					callback: () => {
-						player.go.setFrame(0);
-						mirrorPlayer.go.setFrame(0);
-						this.scene.state = "play";
-						this.scriptAction = -1;
-					}
-				});
 			}
 		}
 
