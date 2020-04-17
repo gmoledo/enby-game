@@ -14,6 +14,7 @@ class UIScene extends Phaser.Scene {
 		this.load.bitmapFont("font", "assets/font.png", "assets/font.fnt");
 
 		this.load.image("playerPortrait", "assets/player_portrait.png");
+		this.load.image("momPortrait", "assets/mom_portrait.png");
 
 		this.load.image("black", "assets/black.png");
 	}

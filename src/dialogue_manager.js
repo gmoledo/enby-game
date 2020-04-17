@@ -29,6 +29,10 @@ class DialogueManager {
 		this.playerPortrait.setVisible(false);
 		this.playerPortrait.setPipeline("BlackAndWhite");
 
+		this.momPortrait = this.scene.add.sprite(this.dialogueBox.x - this.dialogueBox.width / 2 + 95, this.dialogueBox.y, "momPortrait");
+		this.momPortrait.setVisible(false);
+		this.momPortrait.setPipeline("BlackAndWhite");
+
 		this.activePortrait = null;
 
 		// Member variables
@@ -93,18 +97,23 @@ class DialogueManager {
 				this.playerPortrait.setVisible(true);
 				this.activePortrait = this.playerPortrait;
 			}
+			if (character == "Mom") {
+				this.momPortrait.setVisible(true);
+				this.activePortrait = this.momPortrait;
+			}
 		}
 
-		if (this.scene.TestScene.mapManager.currentLayer.y + 200 > this.scene.TestScene.player.go.y) {
-			this.dialogueBox.y = this.scene.cameras.main.height - this.dialogueBox.height + 40;
-			this.staticText.y = this.dialogueBox.y - 58;
-			this.dynamicText.y = this.dialogueBox.y - 58;
-			if (this.activePortrait) this.activePortrait.y = this.dialogueBox.y;
-		}
-		else {
+		if (this.scene.TestScene.mapManager.currentLayer.y + this.scene.cameras.main.height - 200 < this.scene.TestScene.player.go.y ||
+			this.scene.TestScene.mapManager.currentLayer.y + this.scene.cameras.main.height - 200 < this.scene.TestScene.mom.go.y) {
 			this.dialogueBox.y = 80;
 			this.staticText.y = 22;
 			this.dynamicText.y = 22;
+			if (this.activePortrait) this.activePortrait.y = this.dialogueBox.y;
+		}
+		else {
+			this.dialogueBox.y = this.scene.cameras.main.height - this.dialogueBox.height + 40;
+			this.staticText.y = this.dialogueBox.y - 58;
+			this.dynamicText.y = this.dialogueBox.y - 58;
 			if (this.activePortrait) this.activePortrait.y = this.dialogueBox.y;
 		}
 

@@ -22,7 +22,7 @@ class ScriptManager {
 			if (this.scriptAction == 0) {
 				this.scene.UIScene.black.setVisible(true);
 				
-				player.goto(22, 5);
+				player.goto(22, 6);
 				player.go.setFrame(2);
 				mom.go.setVisible(false);
 
@@ -56,11 +56,11 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 5) {
-				mom.scriptMove(12, 11, 8, 0, true);
+				mom.scriptMove(12, 10, 10, 0, true);
 			}
 
 			if (this.scriptAction == 6) {
-				mom.scriptMove(15, 11, 6, 0, true);
+				mom.scriptMove(15, 10, 6, 0, true);
 			}
 
 			if (this.scriptAction == 7) {
@@ -89,24 +89,24 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 13) {
-				mom.scriptMessage("Sweetie, is something wrong?");
+				mom.scriptMessage("Sweetie, is something the matter?");
 			}
 
 			if (this.scriptAction == 14) {
-				player.scriptMessage("No. Nothing's wrong.");
+				player.scriptMessage("No, mom.");
 			}
 
 			if (this.scriptAction == 15) {
-				mom.scriptMessage("You're sure?");
+				mom.scriptMessage("Okay then. I'll see you soon honey.");
 			}
 
 			if (this.scriptAction == 16) 
 			{
-				mom.scriptMove(12, 11, 6, 0, true);
+				mom.scriptMove(12, 10, 6, 0, true);
 			}
 				
 			if (this.scriptAction == 17) {
-				mom.scriptMove(12, 18, 14, 0, true);
+				mom.scriptMove(12, 18, 16, 0, true);
 			}
 
 			if (this.scriptAction == 18) {

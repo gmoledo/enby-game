@@ -157,7 +157,7 @@ class TestScene extends Phaser.Scene {
 		this.mirror.setOrigin(0, 1);
 
 		this.bed = this.add.sprite( 21 * 40 + this.mapManager.roomLayer.x,
-									3 * 40 + this.mapManager.roomLayer.y,
+									4 * 40 + this.mapManager.roomLayer.y,
 									"bed");
 		this.bed.setOrigin(0, 0);
 
@@ -169,7 +169,7 @@ class TestScene extends Phaser.Scene {
 
 
 		this.blanket = this.add.sprite( 21 * 40 + this.mapManager.roomLayer.x,
-										3 * 40 + this.mapManager.roomLayer.y,
+										4 * 40 + this.mapManager.roomLayer.y,
 										"blanket");
 		this.blanket.setOrigin(0, 0);
 
@@ -182,7 +182,7 @@ class TestScene extends Phaser.Scene {
 
 
 		this.mirrorPlayer = new MirrorPlayer(this);
-		this.mirrorPlayer.goto(20, 3);
+		this.mirrorPlayer.goto(20, 2);
 		this.children.sendToBack(this.mirrorPlayer.go);
 
 		this.white = this.add.sprite(0, 0, "white");
