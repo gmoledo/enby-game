@@ -17,7 +17,7 @@ class ScriptManager {
 
 			let mom = this.scene.mom;
 			let player = this.scene.player;
-
+			let mirrorPlayer = this.scene.mirrorPlayer;
 
 			if (this.scriptAction == 0) {
 				this.scene.UIScene.black.setVisible(true);
@@ -125,20 +125,93 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 20) {
-				player.scriptMove(player.tilePos.x - 1, player.tilePos.y, 2, 200, true);
+				mirrorPlayer.scriptMove(mirrorPlayer.tilePos.x - 1, mirrorPlayer.tilePos.y, 2, 500, false);
+				player.scriptMove(player.tilePos.x - 1, player.tilePos.y, 2, 500, true);
 			}
 
 			if (this.scriptAction == 21) {
-				player.scriptMove(player.tilePos.x, player.tilePos.y - 1, 2, 0, true);
+				player.go.setFrame(2);
+				mirrorPlayer.go.setFrame(0);
+				this.scene.time.addEvent({
+					delay: 800,
+					callback: () => {
+						player.scriptShake();
+						mirrorPlayer.scriptShake();
+					}
+				});
+
+				this.scene.time.addEvent({
+					delay: 1500,
+					callback: () => {
+						player.go.x = 19 * 40 + this.scene.mapManager.currentLayer.x;
+						mirrorPlayer.go.x = 19 * 40 + this.scene.mapManager.currentLayer.x;
+						this.scene.time.addEvent({
+							delay: 400,
+							callback: () => {
+								player.go.setFrame(0);
+								mirrorPlayer.go.setFrame(2);
+								this.updateScript();
+							}
+						});
+					}
+				});
 			}
 
 			if (this.scriptAction == 22) {
-				player.scriptMessage(". . .");
+				player.scriptMessage([". . ."], 500);
 			}
 
 			if (this.scriptAction == 23) {
-				this.scene.state = "play";
-				this.scriptAction = -1;
+				player.go.setFrame(2);
+				mirrorPlayer.go.setFrame(0);
+
+				player.scriptMessage(["I have to go into town? Looking like this?"], 500);
+			}
+
+			if (this.scriptAction == 24) {
+				mirrorPlayer.scriptMove(19, 4, 2, 0, false);
+				player.scriptMove(19, 5, 2, 0);
+			}
+
+			if (this.scriptAction == 25) {
+				player.scriptMessage(["I'm gross.", "My chest is all exposed in this thin shirt. My arms too, hairy, like a dog."]);
+			}
+
+			if (this.scriptAction == 26) {
+				mirrorPlayer.scriptMove(19, 3, 2, 0, false, true);
+				player.scriptMove(19, 6, 2, 0, true, true);
+			}
+
+			if (this.scriptAction == 27) {
+				player.scriptMessage(["And why are these shorts so short? Like I want people to notice how thick my thighs are.", "What a mess."]);
+			}
+
+			if (this.scriptAction == 28) {
+				mirrorPlayer.scriptMove(19, 4, 2, 0, false);
+				player.scriptMove(19, 5, 2, 0);
+			}
+
+			if (this.scriptAction == 29) {
+				player.scriptMessage(["At least my hair is okay. I don't know what it is about it, but it looks. . .just right.", "If only the clothes could match."]);
+			}
+
+			if (this.scriptAction == 30) {
+				mirrorPlayer.scriptMove(19, 3, 2, 0, false, true);
+				player.scriptMove(19, 6, 2, 0, true, true);
+			}
+
+			if (this.scriptAction == 31) {
+				player.scriptMessage(["Well, I guess I should get going. No point stalling any longer. Mom's gonna get suspicious again."]);
+			}
+
+			if (this.scriptAction == 32) {
+				this.scene.time.addEvent({
+					delay: 500,
+					callback: () => {
+						this.scene.state = "play";
+						this.scriptAction = -1;
+					}
+				});
 			}
 		}
 
@@ -163,23 +236,23 @@ class ScriptManager {
 				mom.go.setFrame(0);
 				mom.go.setVisible(true);
 
-				mom.scriptMove(17, 8, 1, 500);
+				mom.scriptMove(17, 8, 2, 500);
 			}
 
 			if (this.scriptAction == 2) {
-				mom.scriptMessage("You were staring at the mirror again, weren't you?", 0);
+				mom.scriptMessage("Honey, you were in there a long time.", 0);
 			}
 		
 			if (this.scriptAction == 3) {
-				player.scriptMessage("No. . .", 0);
+				player.scriptMessage(". . .Was I?", 0);
 			}
 
 			if (this.scriptAction == 4) {
-				mom.scriptMessage("Honey, what have I told you? You're perfect the way you are! You shouldn't feel bad.");
+				mom.scriptMessage("Sweetie, what have I told you? You're perfect the way you are! You shouldn't feel bad.");
 			}
 
 			if (this.scriptAction == 5) {
-				player.scriptMessage("Yeah, that's easy for you to say.")
+				player.scriptMessage("That's easy for you to say!")
 			}
 
 			if (this.scriptAction == 6) {
@@ -195,7 +268,7 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 9) {
-				player.scriptMessage("I know.");
+				player.scriptMessage("Yeah, I know.");
 			}
 
 			if (this.scriptAction == 10) {
@@ -207,14 +280,13 @@ class ScriptManager {
 				this.scene.time.addEvent({
 					delay: 750,
 					callback: () => {
-						mom.go.setFrame(0);
-						mom.scriptMessage("Oh, and the rhyme, sweetie! Don't forget the rhyme.");
+						mom.scriptMessage("And sweetie, let's not forget the rhyme.");
 					}
 				})
 			}
 
 			if (this.scriptAction == 12) {
-				player.scriptMessage("I know, mother.");
+				player.scriptMessage(["I know, mother.", "Ahem."]);
 			}
 
 			if (this.scriptAction == 13) {
@@ -225,11 +297,11 @@ class ScriptManager {
 
 			if (this.scriptAction == 14) {
 				this.scene.UIScene.dialogueManager.dialogueText = this.scene.UIScene.dialogueManager.staticText;
-				mom.scriptMessage("That's right, sweetie. I'll see you when you get back!", 0);
+				mom.scriptMessage("Good. I'll see you when you get back.", 0);
 			}
 
 			if (this.scriptAction == 15) {
-				mom.scriptMove(17, 7, 1, 0).setCallback("onComplete", () => {
+				mom.scriptMove(17, 7, 2, 0).setCallback("onComplete", () => {
 					mom.go.setVisible(false);
 					this.updateScript();
 				}, [], this);

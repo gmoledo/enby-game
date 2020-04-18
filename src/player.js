@@ -107,13 +107,6 @@ class Player {
 		 		}
 			}
 
-			if (!this.mirrorFlag) {
-				if (this.scene.physics.world.overlap(this.go, this.scene.mirrorTrigger.go, this.hitMirrorTrigger, () => true, this)) {
-					moveX = 0;
-					moveY = 0;
-				}
-			}
-
 			if (!this.goInStoreFlag) {
 		 		let storeGOs = this.scene.storeTriggers.map((trigger) => trigger.go);
 				if (this.scene.physics.world.overlap(this.go, storeGOs, this.hitStoreTrigger, () => true, this)) {
@@ -151,13 +144,6 @@ class Player {
 				if (tile.properties.Direction == "Down") {
 					moveX = 0;
 					moveY = 1;
-				}
-
-				if (this.scene.mapManager.currentMap == this.scene.mapManager.roomMap) {
-					this.scene.mirrorPlayer.goto(11, 18);
-					this.scene.mirrorPlayer.go.anims.play("walkUp", true);
-					this.scene.mirrorPlayer.go.currentAnim = this.walkUpAnim;
-					this.scene.mirrorPlayer.move(moveX, moveY);
 				}
 			}
 		}
@@ -280,17 +266,6 @@ class Player {
 
 		this.go.setFrame(frame);
 		this.go.anims.stop();
-	}
-
-	// When landing on egg, destroy egg and queue next egg message, pausing scene
-	hitMirrorTrigger(player, mirror) {
-		this.mirrorFlag = true;
-		this.pauseAnimation();
-		this.scene.mirrorPlayer.pauseAnimation();
-
-		this.scene.state = "script";
-		this.scene.scriptManager.script = "LookInMirror";
-		this.scene.scriptManager.updateScript();
 	}
 
 	hitEggTrigger (player, egg) {
@@ -448,6 +423,22 @@ class Player {
 
 		this.scene.tweens.timeline({
 			tweens: [up, down]
+		});
+	}
+
+	scriptShake() {
+		this.scene.time.addEvent({
+			repeat: 30,
+			delay: 20,
+			callback: (pos) => {
+				if (this.go.x < pos) {
+					this.go.x = pos + 1;
+				}
+				else {
+					this.go.x = pos - 1;
+				}
+			},
+			args: [this.go.x]
 		});
 	}
 

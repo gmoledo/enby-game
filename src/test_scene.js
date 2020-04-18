@@ -182,7 +182,7 @@ class TestScene extends Phaser.Scene {
 
 
 		this.mirrorPlayer = new MirrorPlayer(this);
-		this.mirrorPlayer.goto(20, 2);
+		this.mirrorPlayer.goto(20, 3);
 		this.children.sendToBack(this.mirrorPlayer.go);
 
 		this.white = this.add.sprite(0, 0, "white");
