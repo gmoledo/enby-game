@@ -41,7 +41,7 @@ class Trigger {
 			Trigger.doorMessage = ["You'd better be getting those eggs!"]
 		}
 		if (this.triggerType == "forestBound") {
-			Trigger.boundMessage = ["I should go get those eggs."];
+			Trigger.boundMessage = ["I shouldn't go in there."];
 		}
 	}
 }

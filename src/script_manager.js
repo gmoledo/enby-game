@@ -206,6 +206,7 @@ class ScriptManager {
 
 			if (this.scriptAction == 32) {
 				player.go.setFrame(0);
+				mirrorPlayer.go.setFrame(2);
 				this.scene.time.addEvent({
 					delay: 500,
 					callback: () => {
