@@ -101,7 +101,7 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 15) {
-				mom.scriptMessage("Okay. Then I'll see you soon honey.");
+				mom.scriptMessage("Okay. Then I'll see you soon, honey.");
 			}
 
 			if (this.scriptAction == 16) 
@@ -205,6 +205,7 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 32) {
+				player.go.setFrame(0);
 				this.scene.time.addEvent({
 					delay: 500,
 					callback: () => {
@@ -248,7 +249,7 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 4) {
-				mom.scriptMessage("Sweetie, what have I told you? You're perfect the way you are! You shouldn't feel bad.");
+				mom.scriptMessage("Sweetie, what have I told you? You're perfect the way you are! You shouldn't feel bad about yourself.");
 			}
 
 			if (this.scriptAction == 5) {
@@ -286,7 +287,7 @@ class ScriptManager {
 			}
 
 			if (this.scriptAction == 12) {
-				player.scriptMessage(["I know, mother.", "Ahem."]);
+				player.scriptMessage(["I know, mother.", "*Ahem*"]);
 			}
 
 			if (this.scriptAction == 13) {

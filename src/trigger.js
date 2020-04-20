@@ -27,19 +27,15 @@ class Trigger {
 		// Static members so that no matter what egg you get first, it'll give you the same message
 		if (this.triggerType == "egg") {
 			Trigger.eggMessages = [
-				["Egg 1"],
-				["Egg 2"],
-				["Egg 3"],
-				["Egg 4"],
-				["Egg 5"],
-				["Egg 6"],
-				["Egg 7"]
+				["That outfit looked really nice, though. I wish I could take it.", "But Mom would get mad."],
+				["She always makes me wear what she wants. Never gives me the choice. As if I don't have a mind of my own."],
+				["I think she's afraid. I dunno what of. But she doesn't want me making decisions, that's for sure."],
+				["Well, what if I made my own decision for once?", "Want that outfit? Yeah, I'll get it. Who cares what she thinks?"],
+				["But I don't want her to be upset.", "She's still my mom, afterall."],
+				["I guess I'll just bring back these eggs. Maybe get her an extra one, too."],
+				["Hope this makes her happy."]
 			];
 			Trigger.eggMessageIndex = 0;
-		}
-		if (this.triggerType == "mirrorTrigger") {
-			Trigger.mirrorMessage = [	". . .", "Something's . . . off. Is it my hair?", ". . .",
-										"No. No, it's the shirt. And the shorts. God, these clothes look . . . wrong.", "I hope no one notices. . ."]
 		}
 		if (this.triggerType == "door") {
 			Trigger.doorMessage = ["You'd better be getting those eggs!"]
